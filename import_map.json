@@ -1,0 +1,7 @@
+{
+  "imports": {
+    "deno/": "https://deno.land/std@0.122.0/",
+    "oak": "https://deno.land/x/oak@v10.2.0/mod.ts",
+    "dinovel/": "./src/"
+  }
+}

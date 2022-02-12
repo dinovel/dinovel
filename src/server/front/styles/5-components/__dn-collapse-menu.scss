@@ -1,0 +1,28 @@
+dn-collapse-menu {
+  padding: 2px;
+
+  .menu {
+    &-button {
+      background-color: var(--color-primary);
+      text-align: center;
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+      @include clickable;
+    }
+
+    &-item {
+      padding: 0.1rem 0.5rem;
+      opacity: 0.7;
+      @include clickable;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+    &-items {
+      border-left: 1px solid var(--color-primary);
+      border-right: 1px solid var(--color-primary);
+    }
+  }
+}
