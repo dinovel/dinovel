@@ -1,0 +1,14 @@
+{
+  "app": "dinovel",
+  "version": "0.1.0",
+  "importMap": "./import_map.json",
+  "denoConfig": "./deno.jsonc",
+  "output": "./dist",
+  "libs": {
+    "main": "./src/client/main.ts"
+  },
+  "styles": {
+    "main": "./styles/main.scss"
+  },
+  "watch": ["./src", "./styles"]
+}

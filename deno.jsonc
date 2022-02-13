@@ -6,8 +6,7 @@
       "dom.asynciterable",
       "deno.ns",
       "deno.unstable"
-    ],
-    "strict": true
+    ]
   },
   "fmt": {
     "options": {
