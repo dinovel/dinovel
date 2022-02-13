@@ -6,6 +6,7 @@ import {
 import { commandMap } from './commands/_.ts';
 import { HelpCommand } from './commands/helper.cmd.ts';
 import { logger } from './logger.ts';
+import { initDinovel } from './init/init.ts';
 
 import type { CliCommand } from "./models.ts";
 const cmdList = [...commandMap.values(), HelpCommand];
@@ -27,6 +28,7 @@ const cmd = cmdList.find(e => e.name === commandName);
 if (!commandName) {
   await runCommand(HelpCommand, [], args);
 } else if (cmd) {
+  await initDinovel();
   await runCommand(cmd, args._.slice(1), args);
 } else {
   logger.error(`Command ${commandName} not found`);

@@ -1,14 +1,36 @@
 {
   "app": "dinovel",
   "version": "0.1.0",
-  "importMap": "./import_map.json",
-  "denoConfig": "./deno.jsonc",
-  "output": "./dist",
-  "libs": {
-    "main": "./src/client/main.ts"
+  "mode": "dev",
+  "plugins": [],
+  "server": {
+    "port": 8666,
+    "host": "0.0.0.0",
+    "static": "./dist",
+    "assets": "./assets",
+    "logErrors": true
   },
-  "styles": {
-    "main": "./styles/main.scss"
+  "compilers": {
+    "deno": {
+      "version": "1.8.0",
+      "watch": ["./src"],
+      "output": "./dist/libs",
+      "map": {
+        "dinovel": "./src/client/main.ts"
+      }
+    },
+    "sass": {
+      "version": "1.49.0",
+      "watch": ["./styles"],
+      "output": "./dist/libs",
+      "map": {
+        "styles": "./styles/main.scss"
+      }
+    }
   },
-  "watch": ["./src", "./styles"]
+  "deno": {
+    "importMap": "./import_map.json",
+    "configFile": "./deno.jsonc",
+    "minVersion": "1.18.2"
+  }
 }
