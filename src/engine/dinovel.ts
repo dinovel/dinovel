@@ -1,6 +1,6 @@
 import { EventsHandler } from 'dinovel/std/core/events.ts';
 import { LoggerService } from 'dinovel/std/logger.ts';
-import { DinovelCompilers } from "../compiler/compiler.ts";
+import { DinovelCompilers } from "dinovel/compiler/compiler.ts";
 
 import { EngineEvents } from './events.ts';
 import { getRuntime } from './internal/runtime.ts';

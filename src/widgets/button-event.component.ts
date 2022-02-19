@@ -1,9 +1,9 @@
-import { declareComponent, ComponentDeclaration } from '../render-v2/__.ts';
+import { declareComponent, ComponentDeclaration } from 'dinovel/render/__.ts';
 import { Dinovel } from 'dinovel/engine/dinovel.ts';
 
 const template = /*html*/`
 <button
-  class="dn-button-event"
+  class="dn-button dn-button--event"
   :disabled="disabled"
   @click="onClick"
 >{{ text }}</button>

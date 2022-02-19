@@ -1,10 +1,17 @@
-import { home } from './views/home.ts';
+import { App } from './app.ts';
 import { Render } from 'dinovel/render/render.ts';
+import { initDinovel } from './services/__.ts';
 
 class ClientRender extends Render {
   public constructor() {
-    super(home);
+    super(App);
+  }
+
+  async beforeMount() {
+    await super.beforeMount();
+    initDinovel();
   }
 }
 
-new ClientRender().mount();
+new ClientRender()
+  .mount();

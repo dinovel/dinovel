@@ -1,9 +1,10 @@
 import { Dinovel } from 'dinovel/engine/dinovel.ts';
 
 import { PublicEvents } from '../shared/events.ts';
+import { ServerErrorEvent } from './server-error-event.ts';
 
 export interface ServerEvents {
-  serverError: ErrorEvent;
+  serverError: ServerErrorEvent;
   serverStart: number;
   publicEvent: keyof PublicEvents;
   fileChanged: string[];

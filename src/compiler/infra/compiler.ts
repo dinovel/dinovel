@@ -46,7 +46,7 @@ export abstract class BaseCompiler implements Compiler {
       const internalSubject = new Subject<string[]>();
       internalSubject
         .pipe(debounce(300))
-        .subscribe({ next: this.processFileChanged });
+        .subscribe({ next: f => this.processFileChanged(f) });
 
       const watcher = Deno.watchFs(paths);
       for await (const event of watcher) {
@@ -58,7 +58,8 @@ export abstract class BaseCompiler implements Compiler {
     }
   }
 
-  protected abstract compile(files: string[]): Promise<CompileResult[]>;
+  public abstract compileFile(files: string[]): Promise<CompileResult[]>;
+  public abstract compile(): Promise<CompileResult[]>;
 
   private async processFileChanged(paths: string[]): Promise<void> {
     const cleanPaths: string[] = [];
@@ -68,8 +69,12 @@ export abstract class BaseCompiler implements Compiler {
     }
 
     this._fileChanged.next(cleanPaths);
-    const result = await this.compile(cleanPaths);
-    result.forEach(res => this._compileResults.next(res));
+    try {
+      const result = await this.compileFile(cleanPaths);
+      result.forEach(res => this._compileResults.next(res));
+    } catch (error) {
+      this._errors.next(error);
+    }
   }
 
   private loadWatchPaths(): string[] {

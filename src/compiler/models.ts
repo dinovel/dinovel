@@ -11,11 +11,15 @@ export interface CompileResult {
 export interface Compiler {
   /** key name */
   readonly name: string;
+  readonly config: CompilerConfig;
   /** Set compiler configuration */
   setConfig(config: CompilerConfig): void;
   /** Start watching for file changes */
   startWatch(): Promise<void>;
-
+  /** Compile target files */
+  compileFile(files: string[]): Promise<CompileResult[]>;
+  /** Compile sources */
+  compile(): Promise<CompileResult[]>
   /** Observable for compile results */
   readonly compileResults: IObservable<CompileResult>;
   /** Observable for file changes */

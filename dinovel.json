@@ -8,12 +8,17 @@
     "host": "0.0.0.0",
     "static": "./dist",
     "assets": "./assets",
-    "logErrors": true
+    "logErrors": false
   },
   "compilers": {
     "deno": {
       "version": "1.8.0",
-      "watch": ["./src"],
+      "watch": [
+        "./src/client",
+        "./src/widgets",
+        "./src/render",
+        "./src/std"
+      ],
       "output": "./dist/libs",
       "map": {
         "dinovel": "./src/client/main.ts"

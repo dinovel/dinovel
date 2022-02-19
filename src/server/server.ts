@@ -32,10 +32,6 @@ export class Server {
     const app = this.buildApp();
     this._controller = new AbortController();
 
-    app.use((ctx) => {
-      ctx.response.body = "Hello World!";
-    });
-
     try {
       this._hasStarted = true;
       await app.listen({

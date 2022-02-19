@@ -8,6 +8,7 @@ import { Middleware } from './_models.ts';
 import { useSSE } from './events.ts';
 import { useStaticFiles } from './static.ts';
 import { useViews } from './views.ts';
+import { buildHomeView } from '../views/home.ts';
 
 const MIDDLEWARE: Middleware[] = [
   useSSE,
@@ -24,4 +25,9 @@ export function registerMiddleware(app: Application, options: DevServerConfig): 
 
   app.use(router.routes());
   app.use(router.allowedMethods());
+
+  app.use(ctx => {
+    ctx.response.body = buildHomeView();
+    ctx.response.type = 'text/html';
+  });
 }
