@@ -1,6 +1,6 @@
 import { Render } from 'dinovel/render/render.ts';
 import { DinovelApp } from './app.ts';
-import { initDinovel } from './services/__.ts';
+import { initDinovel, injectLibs } from './services/__.ts';
 
 
 class ClientRender extends Render {
@@ -10,6 +10,7 @@ class ClientRender extends Render {
 
   async beforeMount() {
     await super.beforeMount();
+    injectLibs();
     initDinovel();
   }
 
