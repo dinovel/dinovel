@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "mode": "dev",
   "plugins": [],
+  "gameRoot": "./temp",
   "server": {
     "port": 8666,
     "host": "0.0.0.0",

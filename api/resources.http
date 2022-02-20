@@ -1,0 +1,6 @@
+# =============================================================================
+# /api/resources endpoint tests
+# =============================================================================
+
+## Test that the /api/resources endpoint returns a list of resources
+GET {{ REST_CLIENT_URL }}/api/resources

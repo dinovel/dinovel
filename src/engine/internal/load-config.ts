@@ -37,6 +37,7 @@ export async function loadDinovelConfiguration(path: string): Promise<[boolean, 
     app: srcFile.app || 'Dinovel',
     version: srcFile.version || '0.1.0',
     mode: srcFile.mode || 'dev',
+    gameRoot: srcFile.gameRoot || './src/game',
     server: {
       ...defaultServerConfig,
       ...(srcFile.server ?? {}),

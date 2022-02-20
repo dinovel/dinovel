@@ -56,6 +56,8 @@ export interface DinovelConfig {
   readonly server: DevServerConfig;
   /** Compilers configuration */
   readonly compilers: { [key: string]: CompilerConfig };
+  /** Root folder to generate game files */
+  readonly gameRoot: string;
   /** Runtime plugins to load */
   readonly plugins?: string[];
 }

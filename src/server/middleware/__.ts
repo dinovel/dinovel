@@ -9,6 +9,7 @@ import { useSSE } from './events.ts';
 import { useStaticFiles } from './static.ts';
 import { useViews } from './views.ts';
 import { buildHomeView } from '../views/home.ts';
+import { apiRouter } from './api/__.ts';
 
 const MIDDLEWARE: Middleware[] = [
   useSSE,
@@ -22,6 +23,8 @@ export function registerMiddleware(app: Application, options: DevServerConfig): 
   MIDDLEWARE.forEach(middleware => {
     middleware(app, router, options);
   });
+
+  router.use(apiRouter.routes(), apiRouter.allowedMethods());
 
   app.use(router.routes());
   app.use(router.allowedMethods());
