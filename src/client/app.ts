@@ -1,14 +1,16 @@
 import { declareComponent } from 'dinovel/render/declare.ts';
-import { home } from './views/home.ts';
+import { RouterView } from './router/router.component.ts';
 
 const template = /*html*/`<div class="app__container">
   <div class="app__header">
     <h1>Dinovel</h1>
   </div>
-  <home></home>
+  <router-view></router-view>
 </div>`;
 
-export const App = declareComponent({
+export const DinovelApp = declareComponent({
   template,
-  components: { home },
+  components: {
+    RouterView,
+  },
 });

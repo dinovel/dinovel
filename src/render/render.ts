@@ -66,7 +66,7 @@ export abstract class Render {
     // Create vue app
     const app = createApp(entryComponent);
     // Register plugins
-    await this.apply(app.use);
+    await this.apply(app);
     // Mount app
     app.mount(this.targetSelector);
     // Run afterMount actions

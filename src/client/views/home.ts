@@ -1,12 +1,13 @@
 import { declareComponent } from 'dinovel/render/declare.ts';
+import { DnWidgets } from 'dinovel/widgets/__.ts';
 
-const template = /*html*/`<div>{{ message }}</div>`;
+const template = /*html*/`<div>
+  <dn-button-event text="Resources" event="nav" event-data="resources" ></dn-button-event>
+</div>`;
 
-export const home = declareComponent({
+export const HomeView = declareComponent({
   template,
-  data() {
-    return {
-      message: 'Hello World!',
-    }
+  components: {
+    ...DnWidgets
   }
 });

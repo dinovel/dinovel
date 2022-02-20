@@ -1,11 +1,7 @@
-import { Dinovel } from 'dinovel/engine/dinovel.ts';
-
-import { PublicEvents } from 'dinovel/server/shared/events.ts';
+import { events } from '../core/events.ts';
 
 export function startEventhandler(): void {
-  const handler = Dinovel.events.add<PublicEvents>();
-
-  handler.on('cssLoaded', () => {
+  events.on('cssLoaded', () => {
     const links = document.getElementsByTagName('link');
     for (const l of links) {
       if (l.rel == 'stylesheet') {
@@ -16,7 +12,7 @@ export function startEventhandler(): void {
     console.log('css loaded');
   });
 
-  handler.on('scriptLoaded', () => {
+  events.on('scriptLoaded', () => {
     window.location.reload();
   });
 }

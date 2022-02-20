@@ -21,7 +21,6 @@ export const EventButton = declareComponent({
       required: true,
     },
     eventData: {
-      type: Object,
       default: undefined,
     },
     disabled: {
