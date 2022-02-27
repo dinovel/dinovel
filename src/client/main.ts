@@ -1,7 +1,8 @@
-import { Render, VueObservable } from 'dinovel/render/__.ts';
+import { Render, VueObservable, useStoreStorage } from 'dinovel/render/__.ts';
 import { App } from 'dinovel/render/vue-models.ts';
-import { DinovelApp } from './app.ts';
+import { DinovelApp, APP_STORAGE_KEY } from './app.ts';
 import { initDinovel, injectLibs } from './services/__.ts';
+import { appStore } from './store/store.ts';
 
 
 class ClientRender extends Render {
@@ -18,8 +19,9 @@ class ClientRender extends Render {
     injectLibs();
     initDinovel();
   }
-
 }
+
+useStoreStorage(appStore, APP_STORAGE_KEY);
 
 new ClientRender()
   .mount();

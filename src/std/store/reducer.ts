@@ -39,7 +39,11 @@ export class Reducer<T extends JSONObject> {
   }
 
   public resetState(state: T): void {
-    this._state.next(deepFreeze(state));
+    const nextState = {
+      ...this._state.value,
+      ...state,
+    }
+    this._state.next(deepFreeze(nextState));
   }
 }
 

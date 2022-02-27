@@ -1,11 +1,15 @@
 import { declareComponent } from 'dinovel/render/declare.ts';
 import { AppRouterNames } from '../../router/app-router.ts';
 import { NavBar } from './nav-bar.ts';
+import { ButtonReset } from '../atom/button-reset.ts';
 
 export const AppBar = declareComponent({
   template: /*html*/`<div class="app-bar">
     <h3 class="brand">{{title}}</h3>
     <nav-bar :views="views"></nav-bar>
+    <div class="right">
+      <button-reset></button-reset>
+    </div>
   </div>`,
   data() {
     return {
@@ -13,5 +17,5 @@ export const AppBar = declareComponent({
       views: AppRouterNames,
     };
   },
-  components: { NavBar },
+  components: { NavBar, ButtonReset },
 });

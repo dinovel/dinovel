@@ -117,3 +117,17 @@ Deno.test('[Store] Should dispatch actions', async () => {
   assertEquals(userState.name, 'John Doe');
 
 });
+
+Deno.test('[Store] Should allow to export/import state', async () => {
+  const appStore = getAppStore();
+  await appStore.dispatch(setUserAge(60));
+
+  const exportValue = appStore.export();
+
+  const appStore2 = getAppStore();
+  appStore2.import(exportValue);
+
+  const userState = appStore2.select('user').value;
+
+  assertEquals(userState.age, 60);
+});

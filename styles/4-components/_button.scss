@@ -1,3 +1,9 @@
-.#{$PRE}-button {
+.#{$PRE}button {
   @include clickable;
+
+  &--secondary {
+    background-color: transparent;
+    border: 1px solid var(--color-accent);
+    color: var(--color-accent);
+  }
 }

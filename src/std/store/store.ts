@@ -12,6 +12,7 @@ Action,
   StoreState,
   StoreStateMap,
 } from './models.ts';
+import { Subject } from "../reactive/subject.ts";
 export const GLOBAL_STORE_KEY = Symbol.for('__DINOVEL_STORE__');
 
 /** State handler */
@@ -19,6 +20,11 @@ export class Store<T extends StoreState> {
 
   private readonly _reducerMap: StoreStateMap<T>;
   private _logger = new LoggerService();
+  private _change = new Subject<void>();
+
+  public get change(): IObservable<void> {
+    return this._change;
+  }
 
   public constructor(reducerMap: StoreStateMap<T>) {
     this._reducerMap = reducerMap;
@@ -58,9 +64,25 @@ export class Store<T extends StoreState> {
         }
       }
       resolve();
+      this._change.next();
     });
   }
 
+  public export(): string {
+    // deno-lint-ignore no-explicit-any
+    const state: any = {};
+    for (const key of Object.keys(this._reducerMap)) {
+      state[key] = this._reducerMap[key].state.value;
+    }
+    return JSON.stringify(state);
+  }
+
+  public import(state: string): void {
+    const parsed = JSON.parse(state);
+    for (const key of Object.keys(this._reducerMap)) {
+      this._reducerMap[key].resetState(parsed[key]);
+    }
+  }
 
   /**
    * If store is not initialized, initialize it with the given state.
