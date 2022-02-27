@@ -1,4 +1,4 @@
-import { declareComponent } from 'dinovel/render/declare.ts';
+import { declareComponent, obs } from 'dinovel/render/__.ts';
 import { AppRouter } from './app-router.ts';
 import { appStore } from '../store/store.ts';
 
@@ -13,14 +13,9 @@ template += `\n</div>`;
 export const RouterView = declareComponent({
   template,
   components: {...AppRouter},
-  observable: {
-    appNav() {
-      return appStore.select('nav');
-    }
-  },
-  computed: {
-    current() {
-      return this.$obs.appNav.current;
-    }
-  },
+  setup() {
+    const current = obs(appStore.select('nav'), e => e.current);
+
+    return { current };
+  }
 });
