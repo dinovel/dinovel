@@ -10,6 +10,7 @@ import type {
   DefineComponent,
   EmitsOptions,
   MethodOptions,
+  ObservableOptions,
   RenderFunction,
   SetupContext,
 } from './vue-models.ts';
@@ -36,10 +37,11 @@ export function declareComponent<
   Mixin extends ComponentOptionsMixin = ComponentOptionsMixin,
   Extends extends ComponentOptionsMixin = ComponentOptionsMixin,
   E extends EmitsOptions = EmitsOptions,
+  OBS extends ObservableOptions = {},
   EE extends string = string,
 >(
-  options: ComponentOptionsWithoutProps<Props, RawBindings, D, C, M, Mixin, Extends, E, EE>,
-): DefineComponent<Props, RawBindings, D, C, M, Mixin, Extends, E, EE>;
+  options: ComponentOptionsWithoutProps<Props, RawBindings, D, C, M, Mixin, Extends, E, OBS, EE>,
+): DefineComponent<Props, RawBindings, D, C, M, Mixin, Extends, E, OBS, EE>;
 export function declareComponent<
   PropNames extends string,
   RawBindings,
@@ -49,9 +51,10 @@ export function declareComponent<
   Mixin extends ComponentOptionsMixin = ComponentOptionsMixin,
   Extends extends ComponentOptionsMixin = ComponentOptionsMixin,
   E extends EmitsOptions = Record<string, any>,
+  OBS extends ObservableOptions = {},
   EE extends string = string,
 >(
-  options: ComponentOptionsWithArrayProps<PropNames, RawBindings, D, C, M, Mixin, Extends, E, EE>,
+  options: ComponentOptionsWithArrayProps<PropNames, RawBindings, D, C, M, Mixin, Extends, E, OBS, EE>,
 ): DefineComponent<
   Readonly<
     {
@@ -65,6 +68,7 @@ export function declareComponent<
   Mixin,
   Extends,
   E,
+  OBS,
   EE
 >;
 export function declareComponent<
@@ -76,10 +80,11 @@ export function declareComponent<
   Mixin extends ComponentOptionsMixin = ComponentOptionsMixin,
   Extends extends ComponentOptionsMixin = ComponentOptionsMixin,
   E extends EmitsOptions = Record<string, any>,
+  OBS extends ObservableOptions = {},
   EE extends string = string,
 >(
-  options: ComponentOptionsWithObjectProps<PropsOptions, RawBindings, D, C, M, Mixin, Extends, E, EE>,
-): DefineComponent<PropsOptions, RawBindings, D, C, M, Mixin, Extends, E, EE>;
+  options: ComponentOptionsWithObjectProps<PropsOptions, RawBindings, D, C, M, Mixin, Extends, E, OBS, EE>,
+): DefineComponent<PropsOptions, RawBindings, D, C, M, Mixin, Extends, E, OBS, EE>;
 export function declareComponent(options: any): any {
   return defineComponent(options);
 }

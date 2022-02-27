@@ -12,7 +12,7 @@ Action,
   StoreState,
   StoreStateMap,
 } from './models.ts';
-export const GLOBAL_STORE_KEY = Symbol.for('__DENO_NOVEL_STORE__');
+export const GLOBAL_STORE_KEY = Symbol.for('__DINOVEL_STORE__');
 
 /** State handler */
 export class Store<T extends StoreState> {

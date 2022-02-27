@@ -4,6 +4,7 @@ import { DinovelCompilers } from "dinovel/compiler/compiler.ts";
 
 import { EngineEvents } from './events.ts';
 import { getRuntime } from './internal/runtime.ts';
+import { dinovelStore } from "./store.ts";
 
 /** Global reference to Dinovel engine */
 export const Dinovel = {
@@ -15,6 +16,8 @@ export const Dinovel = {
   events: new EventsHandler<EngineEvents>(),
   /** Compilers */
   compilers: new DinovelCompilers(),
+  /** Store */
+  store: dinovelStore,
 };
 
 export function registerGlobal() {

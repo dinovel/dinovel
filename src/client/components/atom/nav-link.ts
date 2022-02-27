@@ -1,5 +1,6 @@
 import { declareComponent } from 'dinovel/render/declare.ts';
-import { events } from '../../core/events.ts';
+import { appStore } from "../../store/store.ts";
+import { navTo } from '../../store/_nav.ts';
 
 export const NavLink = declareComponent({
   template: /*html*/`<li class="nav-link" @click="nav">{{text}}</li>`,
@@ -15,7 +16,7 @@ export const NavLink = declareComponent({
   },
   methods: {
     nav() {
-      events.emit('nav', this.viewName);
+      appStore.dispatch(navTo(this.viewName));
     }
   }
 });

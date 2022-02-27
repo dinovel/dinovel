@@ -1,4 +1,5 @@
 // deno-lint-ignore-file ban-types no-explicit-any no-empty-interface
+import type { IObservable, IValueObservable } from "../std/reactive/models.ts";
 declare type BaseTypes = string | number | boolean;
 
 declare type Builtin = Primitive | Function | Date | Error | RegExp;
@@ -1034,9 +1035,9 @@ export declare type ComponentObjectPropsOptions<P = Data> = {
     [K in keyof P]: Prop<P[K]> | null;
 };
 
-export declare type ComponentOptions<Props = {}, RawBindings = any, D = any, C extends ComputedOptions = any, M extends MethodOptions = any, Mixin extends ComponentOptionsMixin = any, Extends extends ComponentOptionsMixin = any, E extends EmitsOptions = any> = ComponentOptionsBase<Props, RawBindings, D, C, M, Mixin, Extends, E> & ThisType<CreateComponentPublicInstance<{}, RawBindings, D, C, M, Mixin, Extends, E, Readonly<Props>>>;
+export declare type ComponentOptions<Props = {}, RawBindings = any, D = any, C extends ComputedOptions = any, M extends MethodOptions = any, Mixin extends ComponentOptionsMixin = any, Extends extends ComponentOptionsMixin = any, E extends EmitsOptions = any, OBS extends ObservableOptions = any> = ComponentOptionsBase<Props, RawBindings, D, C, M, Mixin, Extends, E, OBS> & ThisType<CreateComponentPublicInstance<{}, RawBindings, D, C, M, Mixin, Extends, E, OBS, Readonly<Props>>>;
 
-export declare interface ComponentOptionsBase<Props, RawBindings, D, C extends ComputedOptions, M extends MethodOptions, Mixin extends ComponentOptionsMixin, Extends extends ComponentOptionsMixin, E extends EmitsOptions, EE extends string = string, Defaults = {}> extends LegacyOptions<Props, D, C, M, Mixin, Extends>, ComponentInternalOptions, ComponentCustomOptions {
+export declare interface ComponentOptionsBase<Props, RawBindings, D, C extends ComputedOptions, M extends MethodOptions, Mixin extends ComponentOptionsMixin, Extends extends ComponentOptionsMixin, E extends EmitsOptions, OBS extends ObservableOptions, EE extends string = string, Defaults = {}> extends LegacyOptions<Props, D, C, M, Mixin, Extends, OBS>, ComponentInternalOptions, ComponentCustomOptions {
     setup?: (this: void, props: Readonly<LooseRequired<Props & UnionToIntersection<ExtractOptionProp<Mixin>> & UnionToIntersection<ExtractOptionProp<Extends>>>>, ctx: SetupContext<E>) => Promise<RawBindings> | RawBindings | RenderFunction | void;
     name?: string;
     template?: string | object;
@@ -1061,26 +1062,29 @@ export declare interface ComponentOptionsBase<Props, RawBindings, D, C extends C
 
 export declare type ComponentOptionsMixin = ComponentOptionsBase<any, any, any, any, any, any, any, any, any, any>;
 
-export declare type ComponentOptionsWithArrayProps<PropNames extends string = string, RawBindings = {}, D = {}, C extends ComputedOptions = {}, M extends MethodOptions = {}, Mixin extends ComponentOptionsMixin = ComponentOptionsMixin, Extends extends ComponentOptionsMixin = ComponentOptionsMixin, E extends EmitsOptions = EmitsOptions, EE extends string = string, Props = Readonly<{
+export declare type ComponentOptionsWithArrayProps<PropNames extends string = string, RawBindings = {}, D = {}, C extends ComputedOptions = {}, M extends MethodOptions = {}, Mixin extends ComponentOptionsMixin = ComponentOptionsMixin, Extends extends ComponentOptionsMixin = ComponentOptionsMixin, E extends EmitsOptions = EmitsOptions, OBS extends ObservableOptions = {}, EE extends string = string, Props = Readonly<{
     [key in PropNames]?: any;
-}> & EmitsToProps<E>> = ComponentOptionsBase<Props, RawBindings, D, C, M, Mixin, Extends, E, EE, {}> & {
+}> & EmitsToProps<E>> = ComponentOptionsBase<Props, RawBindings, D, C, M, Mixin, Extends, E, OBS, EE, {}> & {
     props: PropNames[];
-} & ThisType<CreateComponentPublicInstance<Props, RawBindings, D, C, M, Mixin, Extends, E>>;
+} & ThisType<CreateComponentPublicInstance<Props, RawBindings, D, C, M, Mixin, Extends, E, OBS>>;
 
-export declare type ComponentOptionsWithObjectProps<PropsOptions = ComponentObjectPropsOptions, RawBindings = {}, D = {}, C extends ComputedOptions = {}, M extends MethodOptions = {}, Mixin extends ComponentOptionsMixin = ComponentOptionsMixin, Extends extends ComponentOptionsMixin = ComponentOptionsMixin, E extends EmitsOptions = EmitsOptions, EE extends string = string, Props = Readonly<ExtractPropTypes<PropsOptions>> & EmitsToProps<E>, Defaults = ExtractDefaultPropTypes<PropsOptions>> = ComponentOptionsBase<Props, RawBindings, D, C, M, Mixin, Extends, E, EE, Defaults> & {
+export declare type ComponentOptionsWithObjectProps<PropsOptions = ComponentObjectPropsOptions, RawBindings = {}, D = {}, C extends ComputedOptions = {}, M extends MethodOptions = {}, Mixin extends ComponentOptionsMixin = ComponentOptionsMixin, Extends extends ComponentOptionsMixin = ComponentOptionsMixin, E extends EmitsOptions = EmitsOptions, OBS extends ObservableOptions = {}, EE extends string = string, Props = Readonly<ExtractPropTypes<PropsOptions>> & EmitsToProps<E>, Defaults = ExtractDefaultPropTypes<PropsOptions>> = ComponentOptionsBase<Props, RawBindings, D, C, M, Mixin, Extends, E, OBS, EE, Defaults> & {
     props: PropsOptions & ThisType<void>;
-} & ThisType<CreateComponentPublicInstance<Props, RawBindings, D, C, M, Mixin, Extends, E, Props, Defaults, false>>;
+} & ThisType<CreateComponentPublicInstance<Props, RawBindings, D, C, M, Mixin, Extends, E, OBS, Props, Defaults, false>>;
 
-export declare type ComponentOptionsWithoutProps<Props = {}, RawBindings = {}, D = {}, C extends ComputedOptions = {}, M extends MethodOptions = {}, Mixin extends ComponentOptionsMixin = ComponentOptionsMixin, Extends extends ComponentOptionsMixin = ComponentOptionsMixin, E extends EmitsOptions = EmitsOptions, EE extends string = string, PE = Props & EmitsToProps<E>> = ComponentOptionsBase<PE, RawBindings, D, C, M, Mixin, Extends, E, EE, {}> & {
+export declare type ComponentOptionsWithoutProps<Props = {}, RawBindings = {}, D = {}, C extends ComputedOptions = {}, M extends MethodOptions = {}, Mixin extends ComponentOptionsMixin = ComponentOptionsMixin, Extends extends ComponentOptionsMixin = ComponentOptionsMixin, E extends EmitsOptions = EmitsOptions, OBS extends ObservableOptions = {}, EE extends string = string, PE = Props & EmitsToProps<E>> = ComponentOptionsBase<PE, RawBindings, D, C, M, Mixin, Extends, E, OBS, EE, {}> & {
     props?: undefined;
-} & ThisType<CreateComponentPublicInstance<PE, RawBindings, D, C, M, Mixin, Extends, E>>;
+} & ThisType<CreateComponentPublicInstance<PE, RawBindings, D, C, M, Mixin, Extends, E, OBS>>;
 
 export declare type ComponentPropsOptions<P = Data> = ComponentObjectPropsOptions<P> | string[];
 
 export declare type ComponentPublicInstance<P = {}, // props type extracted from props option
 B = {}, // raw bindings returned from setup()
 D = {}, // return from data()
-C extends ComputedOptions = {}, M extends MethodOptions = {}, E extends EmitsOptions = {}, PublicProps = P, Defaults = {}, MakeDefaultsOptional extends boolean = false, Options = ComponentOptionsBase<any, any, any, any, any, any, any, any, any>> = {
+OBS extends ObservableOptions = {},
+C extends ComputedOptions = {},
+M extends MethodOptions = {},
+E extends EmitsOptions = {}, PublicProps = P, Defaults = {}, MakeDefaultsOptional extends boolean = false, Options = ComponentOptionsBase<any, any, any, any, any, any, any, any, any, any>> = {
     $: ComponentInternalInstance;
     $data: D;
     $props: MakeDefaultsOptional extends true ? Partial<Defaults> & Omit<P & PublicProps, keyof Defaults> : P & PublicProps;
@@ -1095,9 +1099,10 @@ C extends ComputedOptions = {}, M extends MethodOptions = {}, E extends EmitsOpt
     $forceUpdate: () => void;
     $nextTick: typeof nextTick;
     $watch(source: string | Function, cb: Function, options?: WatchOptions): WatchStopHandle;
-} & P & ShallowUnwrapRef<B> & UnwrapNestedRefs<D> & ExtractComputedReturns<C> & M & ComponentCustomProperties;
+    $obs: ExtractObservableReturns<OBS> & Record<string, any>;
+} & P & ShallowUnwrapRef<B> & UnwrapNestedRefs<D> & ExtractObservableReturns<OBS> & ExtractComputedReturns<C> & M & ComponentCustomProperties;
 
-declare type ComponentPublicInstanceConstructor<T extends ComponentPublicInstance<Props, RawBindings, D, C, M> = ComponentPublicInstance<any>, Props = any, RawBindings = any, D = any, C extends ComputedOptions = ComputedOptions, M extends MethodOptions = MethodOptions> = {
+declare type ComponentPublicInstanceConstructor<T extends ComponentPublicInstance<Props, RawBindings, D, OBS, C, M> = ComponentPublicInstance<any>, Props = any, RawBindings = any, D = any, OBS extends ObservableOptions = {}, C extends ComputedOptions = ComputedOptions, M extends MethodOptions = MethodOptions> = {
     __isFragment?: never;
     __isTeleport?: never;
     __isSuspense?: never;
@@ -1109,6 +1114,8 @@ declare type ComponentWatchOptionItem = WatchOptionItem | WatchOptionItem[];
 declare type ComponentWatchOptions = Record<string, ComponentWatchOptionItem>;
 
 export declare type ComputedOptions = Record<string, ComputedGetter<any> | WritableComputedOptions<any>>;
+
+export type ObservableOptions = Record<string, ((...args: any[]) => (IObservable<any> | IValueObservable<any>))>;
 
 /**
  * Concrete component type matches its actual value: it's either an options
@@ -1149,7 +1156,27 @@ declare function createCompatVue(createApp: CreateAppFunction<Element>, createSi
 
 declare function createComponentInstance(vnode: VNode, parent: ComponentInternalInstance | null, suspense: SuspenseBoundary | null): ComponentInternalInstance;
 
-export declare type CreateComponentPublicInstance<P = {}, B = {}, D = {}, C extends ComputedOptions = {}, M extends MethodOptions = {}, Mixin extends ComponentOptionsMixin = ComponentOptionsMixin, Extends extends ComponentOptionsMixin = ComponentOptionsMixin, E extends EmitsOptions = {}, PublicProps = P, Defaults = {}, MakeDefaultsOptional extends boolean = false, PublicMixin = IntersectionMixin<Mixin> & IntersectionMixin<Extends>, PublicP = UnwrapMixinsType<PublicMixin, 'P'> & EnsureNonVoid<P>, PublicB = UnwrapMixinsType<PublicMixin, 'B'> & EnsureNonVoid<B>, PublicD = UnwrapMixinsType<PublicMixin, 'D'> & EnsureNonVoid<D>, PublicC extends ComputedOptions = UnwrapMixinsType<PublicMixin, 'C'> & EnsureNonVoid<C>, PublicM extends MethodOptions = UnwrapMixinsType<PublicMixin, 'M'> & EnsureNonVoid<M>, PublicDefaults = UnwrapMixinsType<PublicMixin, 'Defaults'> & EnsureNonVoid<Defaults>> = ComponentPublicInstance<PublicP, PublicB, PublicD, PublicC, PublicM, E, PublicProps, PublicDefaults, MakeDefaultsOptional, ComponentOptionsBase<P, B, D, C, M, Mixin, Extends, E, string, Defaults>>;
+export declare type CreateComponentPublicInstance<
+  P = {},
+  B = {},
+  D = {},
+  C extends ComputedOptions = {},
+  M extends MethodOptions = {},
+  Mixin extends ComponentOptionsMixin = ComponentOptionsMixin,
+  Extends extends ComponentOptionsMixin = ComponentOptionsMixin,
+  E extends EmitsOptions = {},
+  OBS extends ObservableOptions = {},
+  PublicProps = P,
+  Defaults = {},
+  MakeDefaultsOptional extends boolean = false,
+  PublicMixin = IntersectionMixin<Mixin> & IntersectionMixin<Extends>, PublicP = UnwrapMixinsType<PublicMixin, 'P'> & EnsureNonVoid<P>,
+  PublicB = UnwrapMixinsType<PublicMixin, 'B'> & EnsureNonVoid<B>,
+  PublicD = UnwrapMixinsType<PublicMixin, 'D'> & EnsureNonVoid<D>,
+  PublicC extends ComputedOptions = UnwrapMixinsType<PublicMixin, 'C'> & EnsureNonVoid<C>,
+  PublicM extends MethodOptions = UnwrapMixinsType<PublicMixin, 'M'> & EnsureNonVoid<M>,
+  PublicDefaults = UnwrapMixinsType<PublicMixin, 'Defaults'> & EnsureNonVoid<Defaults>,
+  PublicObs extends ObservableOptions = UnwrapMixinsType<PublicMixin, 'OBS'> & EnsureNonVoid<OBS>,
+> = ComponentPublicInstance<PublicP, PublicB, PublicD, PublicObs, PublicC, PublicM, E, PublicProps, PublicDefaults, MakeDefaultsOptional, ComponentOptionsBase<P, B, D, C, M, Mixin, Extends, E, OBS, string, Defaults>>;
 
 /**
  * @private
@@ -1228,17 +1255,17 @@ export declare function defineAsyncComponent<T extends Component = {
     new (): ComponentPublicInstance;
 }>(source: AsyncComponentLoader<T> | AsyncComponentOptions<T>): T;
 
-export declare type DefineComponent<PropsOrPropOptions = {}, RawBindings = {}, D = {}, C extends ComputedOptions = ComputedOptions, M extends MethodOptions = MethodOptions, Mixin extends ComponentOptionsMixin = ComponentOptionsMixin, Extends extends ComponentOptionsMixin = ComponentOptionsMixin, E extends EmitsOptions = {}, EE extends string = string, PP = PublicProps, Props = Readonly<PropsOrPropOptions extends ComponentPropsOptions ? ExtractPropTypes<PropsOrPropOptions> : PropsOrPropOptions> & ({} extends E ? {} : EmitsToProps<E>), Defaults = ExtractDefaultPropTypes<PropsOrPropOptions>> = ComponentPublicInstanceConstructor<CreateComponentPublicInstance<Props, RawBindings, D, C, M, Mixin, Extends, E, PP & Props, Defaults, true> & Props> & ComponentOptionsBase<Props, RawBindings, D, C, M, Mixin, Extends, E, EE, Defaults> & PP;
+export declare type DefineComponent<PropsOrPropOptions = {}, RawBindings = {}, D = {}, C extends ComputedOptions = ComputedOptions, M extends MethodOptions = MethodOptions, Mixin extends ComponentOptionsMixin = ComponentOptionsMixin, Extends extends ComponentOptionsMixin = ComponentOptionsMixin, E extends EmitsOptions = {}, OBS extends ObservableOptions = {}, EE extends string = string, PP = PublicProps, Props = Readonly<PropsOrPropOptions extends ComponentPropsOptions ? ExtractPropTypes<PropsOrPropOptions> : PropsOrPropOptions> & ({} extends E ? {} : EmitsToProps<E>), Defaults = ExtractDefaultPropTypes<PropsOrPropOptions>> = ComponentPublicInstanceConstructor<CreateComponentPublicInstance<Props, RawBindings, D, C, M, Mixin, Extends, E, OBS, PP & Props, Defaults, true> & Props> & ComponentOptionsBase<Props, RawBindings, D, C, M, Mixin, Extends, E, OBS, EE, Defaults> & PP;
 
 export declare function defineComponent<Props, RawBindings = object>(setup: (props: Readonly<Props>, ctx: SetupContext) => RawBindings | RenderFunction): DefineComponent<Props, RawBindings>;
 
-export declare function defineComponent<Props = {}, RawBindings = {}, D = {}, C extends ComputedOptions = {}, M extends MethodOptions = {}, Mixin extends ComponentOptionsMixin = ComponentOptionsMixin, Extends extends ComponentOptionsMixin = ComponentOptionsMixin, E extends EmitsOptions = EmitsOptions, EE extends string = string>(options: ComponentOptionsWithoutProps<Props, RawBindings, D, C, M, Mixin, Extends, E, EE>): DefineComponent<Props, RawBindings, D, C, M, Mixin, Extends, E, EE>;
+export declare function defineComponent<Props = {}, RawBindings = {}, D = {}, C extends ComputedOptions = {}, M extends MethodOptions = {}, Mixin extends ComponentOptionsMixin = ComponentOptionsMixin, Extends extends ComponentOptionsMixin = ComponentOptionsMixin, E extends EmitsOptions = EmitsOptions, OBS extends ObservableOptions = {}, EE extends string = string>(options: ComponentOptionsWithoutProps<Props, RawBindings, D, C, M, Mixin, Extends, E, OBS, EE>): DefineComponent<Props, RawBindings, D, C, M, Mixin, Extends, E, OBS, EE>;
 
-export declare function defineComponent<PropNames extends string, RawBindings, D, C extends ComputedOptions = {}, M extends MethodOptions = {}, Mixin extends ComponentOptionsMixin = ComponentOptionsMixin, Extends extends ComponentOptionsMixin = ComponentOptionsMixin, E extends EmitsOptions = Record<string, any>, EE extends string = string>(options: ComponentOptionsWithArrayProps<PropNames, RawBindings, D, C, M, Mixin, Extends, E, EE>): DefineComponent<Readonly<{
+export declare function defineComponent<PropNames extends string, RawBindings, D, C extends ComputedOptions = {}, M extends MethodOptions = {}, Mixin extends ComponentOptionsMixin = ComponentOptionsMixin, Extends extends ComponentOptionsMixin = ComponentOptionsMixin, E extends EmitsOptions = Record<string, any>, OBS extends ObservableOptions = {}, EE extends string = string>(options: ComponentOptionsWithArrayProps<PropNames, RawBindings, D, C, M, Mixin, Extends, E, OBS, EE>): DefineComponent<Readonly<{
     [key in PropNames]?: any;
-}>, RawBindings, D, C, M, Mixin, Extends, E, EE>;
+}>, RawBindings, D, C, M, Mixin, Extends, E, OBS, EE>;
 
-export declare function defineComponent<PropsOptions extends Readonly<ComponentPropsOptions>, RawBindings, D, C extends ComputedOptions = {}, M extends MethodOptions = {}, Mixin extends ComponentOptionsMixin = ComponentOptionsMixin, Extends extends ComponentOptionsMixin = ComponentOptionsMixin, E extends EmitsOptions = Record<string, any>, EE extends string = string>(options: ComponentOptionsWithObjectProps<PropsOptions, RawBindings, D, C, M, Mixin, Extends, E, EE>): DefineComponent<PropsOptions, RawBindings, D, C, M, Mixin, Extends, E, EE>;
+export declare function defineComponent<PropsOptions extends Readonly<ComponentPropsOptions>, RawBindings, D, C extends ComputedOptions = {}, M extends MethodOptions = {}, Mixin extends ComponentOptionsMixin = ComponentOptionsMixin, Extends extends ComponentOptionsMixin = ComponentOptionsMixin, E extends EmitsOptions = Record<string, any>, OBS extends ObservableOptions = {}, EE extends string = string>(options: ComponentOptionsWithObjectProps<PropsOptions, RawBindings, D, C, M, Mixin, Extends, E, OBS, EE>): DefineComponent<PropsOptions, RawBindings, D, C, M, Mixin, Extends, E, OBS, EE>;
 
 /**
  * Vue `<script setup>` compiler macro for declaring a component's emitted
@@ -1436,6 +1463,16 @@ declare type ExtractComputedReturns<T extends any> = {
     } ? TReturn : T[key] extends (...args: any[]) => infer TReturn ? TReturn : never;
 };
 
+declare type ExtractObservableReturns<T extends any> = {
+  [key in keyof T]: T[key] extends (...args: any[]) => infer TReturn
+    ? TReturn extends IValueObservable<infer TOBS>
+      ? TOBS
+      : TReturn extends IObservable<infer TOBS>
+        ? (TOBS | undefined)
+        : never
+    : never
+}
+
 export declare type ExtractDefaultPropTypes<O> = O extends object ? {
     [K in DefaultKeys<O>]: InferPropType<O[K]>;
 } : {};
@@ -1451,6 +1488,7 @@ any, // C
 any, // M
 any, // Mixin
 any, // Extends
+any, // Observable
 any> ? unknown extends P ? {} : P : {};
 
 export declare type ExtractPropTypes<O> = {
@@ -1626,11 +1664,12 @@ export declare type LegacyConfig = {
     productionTip?: boolean;
 };
 
-declare interface LegacyOptions<Props, D, C extends ComputedOptions, M extends MethodOptions, Mixin extends ComponentOptionsMixin, Extends extends ComponentOptionsMixin> {
+declare interface LegacyOptions<Props, D, C extends ComputedOptions, M extends MethodOptions, Mixin extends ComponentOptionsMixin, Extends extends ComponentOptionsMixin, OBS extends ObservableOptions> {
     compatConfig?: CompatConfig;
     [key: string]: any;
     data?: (this: CreateComponentPublicInstance<Props, {}, {}, {}, MethodOptions, Mixin, Extends>, vm: CreateComponentPublicInstance<Props, {}, {}, {}, MethodOptions, Mixin, Extends>) => D;
     computed?: C;
+    observable?: OBS;
     methods?: M;
     watch?: ComponentWatchOptions;
     provide?: Data | Function;
@@ -1858,15 +1897,16 @@ declare type OptionalKeys<T> = Exclude<keyof T, RequiredKeys<T>>;
 
 export declare type OptionMergeFunction = (to: unknown, from: unknown) => any;
 
-declare type OptionTypesKeys = 'P' | 'B' | 'D' | 'C' | 'M' | 'Defaults';
+declare type OptionTypesKeys = 'P' | 'B' | 'D' | 'C' | 'M' | 'Defaults' | 'OBS';
 
-declare type OptionTypesType<P = {}, B = {}, D = {}, C extends ComputedOptions = {}, M extends MethodOptions = {}, Defaults = {}> = {
+declare type OptionTypesType<P = {}, B = {}, D = {}, C extends ComputedOptions = {}, M extends MethodOptions = {}, Defaults = {}, OBS extends ObservableOptions = {}> = {
     P: P;
     B: B;
     D: D;
     C: C;
     M: M;
     Defaults: Defaults;
+    OBS: OBS;
 };
 
 declare type PatchBlockChildrenFn = (oldChildren: VNode[], newChildren: VNode[], fallbackContainer: RendererElement, parentComponent: ComponentInternalInstance | null, parentSuspense: SuspenseBoundary | null, isSVG: boolean, slotScopeIds: string[] | null) => void;
