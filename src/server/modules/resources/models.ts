@@ -2,7 +2,7 @@ import type { AppResources, AppNames, ResourceCatMap, ResourceExtMap } from 'din
 
 export type DirMap = { [key: string]: DirMap | string };
 
-export interface ResourceState {
+export type ResourceState = {
   resources: AppResources;
   names: AppNames;
   files: DirMap;

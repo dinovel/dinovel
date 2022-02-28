@@ -2,24 +2,24 @@ export type ResourceType = 'image' | 'audio' | 'video';
 
 export type ResourceCategory = 'background' | 'sprite' | 'ui' | 'portrait' | 'music' | 'sfx' | 'video' | 'loop';
 
-export interface ResourcePath {
+export type ResourcePath = {
   path: string;
   type: ResourceType;
 }
 
-export interface ResourceMetadata {
+export type ResourceMetadata = {
   category: ResourceCategory;
   tags: string[];
 }
 
 export type Resource = ResourcePath & ResourceMetadata;
 
-export interface ResourceMap {
+export type ResourceMap = {
   [key: string]: Resource;
 }
 
 export type ResourceNames<T extends ResourceMap> = {
-  [key: string]: keyof T;
+  [key: string]: keyof T & string;
 }
 
 export type ResourceExtMap = {

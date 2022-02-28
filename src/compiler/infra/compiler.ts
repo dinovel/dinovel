@@ -45,7 +45,7 @@ export abstract class BaseCompiler implements Compiler {
     try {
       const internalSubject = new Subject<string[]>();
       internalSubject
-        .pipe(debounce(300))
+        .pipe(debounce(50))
         .subscribe({ next: f => this.processFileChanged(f) });
 
       const watcher = Deno.watchFs(paths);

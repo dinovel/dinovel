@@ -3,3 +3,10 @@ export interface MenuItem {
   label: string;
   event: string;
 }
+
+export type TabItem = {
+  name: string;
+  id: string;
+}
+
+export type Tabs = TabItem[];

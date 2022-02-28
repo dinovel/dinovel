@@ -1,0 +1,19 @@
+.resources-view {
+  @include fill-parent;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: "panel content content content content content";
+
+  &__tabs {
+    margin: 0.235rem;
+    grid-area: panel;
+  }
+
+  &__content {
+    margin: 0.235rem;
+    grid-area: content;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}

@@ -14,5 +14,3 @@ export const DinovelApp = declareComponent({
     AppBar
   },
 });
-
-export const APP_STORAGE_KEY = '#dinovel>dev>store';
