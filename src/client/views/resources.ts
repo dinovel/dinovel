@@ -1,7 +1,8 @@
 import { declareComponent } from 'dinovel/render/declare.ts';
 import { TabContainer, Tabs } from 'dinovel/widgets/__.ts';
-import { appApi } from '../api/__.ts';
 import { ref } from 'vue';
+import { appEvents } from '../events/app-events.ts';
+import { ResFileExplorer } from '../components/organism/res-file-explorer.ts';
 
 const template = /*html*/`
 <div class="resources-view">
@@ -16,9 +17,7 @@ const template = /*html*/`
       </div>
     </template>
     <template v-slot:file-list>
-      <div class="resources-view__tab-content">
-        FileList
-      </div>
+      <res-file-explorer></res-file-explorer>
     </template>
   </tab-container>
   <tab-container
@@ -37,9 +36,11 @@ const template = /*html*/`
 
 export const ResourcesView = declareComponent({
   template,
-  components: { TabContainer },
+  components: {
+    TabContainer,
+    ResFileExplorer,
+  },
   setup() {
-    const [state, load] = appApi.resources.mapResources();
 
     const activeTabId = ref('file-list');
     const activeFileId = ref('');
@@ -60,9 +61,9 @@ export const ResourcesView = declareComponent({
       name: 'anotherFile.mp4',
     }] as Tabs);
 
-    return { tabs, activeTabId, state, load, files, activeFileId };
+    return { tabs, activeTabId, files, activeFileId };
   },
   mounted() {
-    this.load();
-  }
+    appEvents.emit('refreshResources');
+  },
 });

@@ -1,0 +1,9 @@
+.#{$PRE}icon {
+  user-select: none;
+
+  &-svg {
+    .color-accent  {
+      fill: var(--color-accent);
+    }
+  }
+}

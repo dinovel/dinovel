@@ -19,10 +19,13 @@ export class ValueSubject<T> extends Subject<T> implements IValueObservable<T> {
     return super.next(value);
   }
 
-  public override subscribe(observer: Partial<IObserver<T>>): ISubscription {
-    const sub = super.subscribe(observer);
+  public subscribe(next: (value: T) => (unknown | Promise<unknown>)): ISubscription;
+  public subscribe(observer: Partial<IObserver<T>>): ISubscription;
+  public subscribe(observer: Partial<IObserver<T>> | ((value: T) => (unknown | Promise<unknown>))): ISubscription {
+    const obs: Partial<IObserver<T>> = typeof observer === "function" ? { next: observer } : observer;
+    const sub = super.subscribe(obs);
 
-    const { next } = observer;
+    const { next } = obs;
     if (next && sub.open && !this.completed) {
       next(this._value);
     }

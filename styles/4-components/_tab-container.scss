@@ -10,7 +10,13 @@
     border: 1px solid var(--color-accent);
     border-bottom: none;
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: hidden;
+
+    &-item {
+      min-width: 100%;
+      min-height: 100%;
+      overflow: auto;
+    }
   }
 
   &__tabs {

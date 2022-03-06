@@ -22,12 +22,16 @@ export class ReplaySubject<T> extends Subject<T> {
     return super.next(value);
   }
 
-  public override subscribe(observer: Partial<IObserver<T>>): ISubscription {
+  public subscribe(next: (value: T) => (unknown | Promise<unknown>)): ISubscription;
+  public subscribe(observer: Partial<IObserver<T>>): ISubscription;
+  public subscribe(observer: Partial<IObserver<T>> | ((value: T) => (unknown | Promise<unknown>))): ISubscription {
+    const obs: Partial<IObserver<T>> = typeof observer === "function" ? { next: observer } : observer;
+
     for (const value of this._values) {
-      observer.next && observer.next(value);
+      obs.next && obs.next(value);
     }
 
-    return super.subscribe(observer);
+    return super.subscribe(obs);
   }
 
 }

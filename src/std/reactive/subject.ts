@@ -65,8 +65,11 @@ export class Subject<T> implements IObservable<T>, IObserver<T> {
   }
 
   /** Subscribe to notifications */
-  public subscribe(observer: Partial<IObserver<T>>): ISubscription {
-    const sub = new Subscriber<T>(observer, this);
+  public subscribe(next: (value: T) => (unknown | Promise<unknown>)): ISubscription;
+  public subscribe(observer: Partial<IObserver<T>>): ISubscription;
+  public subscribe(observer: Partial<IObserver<T>> | ((value: T) => (unknown | Promise<unknown>))): ISubscription {
+    const obs: Partial<IObserver<T>> = typeof observer === "function" ? { next: observer } : observer;
+    const sub = new Subscriber<T>(obs, this);
     this._subscribers.add(sub);
     return sub;
   }

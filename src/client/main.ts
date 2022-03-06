@@ -4,6 +4,7 @@ import { DinovelApp } from './app.ts';
 import { initDinovel, injectLibs } from './services/__.ts';
 import { appStore } from './store/store.ts';
 import { APP_STORAGE_KEY } from "./core/constants.ts";
+import { appEvents } from './events/app-events.ts';
 
 
 class ClientRender extends Render {
@@ -19,6 +20,11 @@ class ClientRender extends Render {
     await super.beforeMount();
     injectLibs();
     initDinovel();
+  }
+
+  afterMount() {
+    super.afterMount();
+    appEvents.emit('ready');
   }
 }
 

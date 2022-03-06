@@ -9,8 +9,10 @@ export type ResourcesViewState = {
   tabs: Tabs,
 }
 
-export const setActiveTab = createAction<string>('[RES-VIEW]>setActiveTab');
-export const setResources = createAction<ResourceState>('[RES-VIEW]>setResources');
+const P = (m: string) => `[RESOURCES]>${m}`;
+
+export const setActiveTab = createAction<string>(P('setActiveTab'));
+export const setResources = createAction<ResourceState>(P('setResources'));
 
 export const resourcesViewReducer = createReducer<ResourcesViewState>({
     tabs: [],

@@ -23,6 +23,8 @@ export interface IObservable<T> {
 
   /** Subscribe to the observable */
   subscribe(observer: Partial<IObserver<T>>): ISubscription;
+  /** Subscribe to the observable values */
+  subscribe(next: (value: T) => (unknown | Promise<unknown>)): ISubscription;
 
   /** Close a subscription */
   unsubscribe(subscription: ISubscription): void;
