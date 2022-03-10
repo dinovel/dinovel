@@ -10,8 +10,16 @@ const template = /*html*/`
       :class="{ 'dn-tab-container__tab--active': tab.id === activeTab }"
       v-for="tab in tabs"
       :key="tab.id"
-      @click="onTabClick(tab.id)"
-    >{{ tab.name }}</div>
+    >
+      <span
+        @click="onTabClick(tab.id)"
+        class="dn-tab-container__tab-label"
+      >{{ tab.name }}</span>
+      <span
+        v-if="tab.closeable"
+        @click="onTabClose(tab.id)"
+      >X</span>
+    </div>
     <div
       class="dn-tab-container__tab--space"
       v-if="tabsOnTop"
@@ -19,11 +27,11 @@ const template = /*html*/`
   </div>
   <div class="dn-tab-container__content">
     <template v-for="tab in tabs" :key="tab.id">
-      <div v-if="tab.id === activeTab" class="dn-tab-container__content-item">
+      <div v-if="tab.id === activeTab && !useDefaultTab" class="dn-tab-container__content-item">
         <slot :name="tab.id"></slot>
       </div>
     </template>
-    <template v-if="useDefaultTab">
+    <template v-if="useDefaultTab && tabs.length">
       <div class="dn-tab-container__content-item dn-tab-container__content-item--default">
         <slot></slot>
       </div>
@@ -73,9 +81,13 @@ export const TabContainer = declareComponent({
       activeTab.value = tabId;
     }
 
+    function onTabClose(tabId: string) {
+      emit('tab-close', tabId);
+    }
+
     watch(() => props.tabs, () => setInitialTab());
 
-    return { activeTab, setInitialTab, onTabClick };
+    return { activeTab, setInitialTab, onTabClick, onTabClose };
   },
   mounted() {
     this.setInitialTab();

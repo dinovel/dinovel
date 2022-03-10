@@ -1,4 +1,5 @@
 import { declareComponent } from 'dinovel/render/declare.ts';
+import { Ref } from 'dinovel/render/vue-models.ts';
 import { TabContainer, Tabs } from 'dinovel/widgets/__.ts';
 import { ref } from 'vue';
 import { appEvents } from '../events/app-events.ts';
@@ -26,6 +27,7 @@ const template = /*html*/`
     v-model="activeFileId"
     :use-default-tab="true"
     :tabs-on-top="true"
+    @tab-close="onTabClose"
   >
     <div class="resources-view__content-container">
       file content here
@@ -53,15 +55,21 @@ export const ResourcesView = declareComponent({
       name: 'File Explorer',
     }] as Tabs);
 
-    const files = ref([{
+    const files: Ref<Tabs> = ref([{
       id: '1',
       name: 'someFileName.jpg',
+      closeable: true,
     }, {
       id: '2',
       name: 'anotherFile.mp4',
+      closeable: true,
     }] as Tabs);
 
-    return { tabs, activeTabId, files, activeFileId };
+    const onTabClose = (id: string) => {
+      files.value = files.value.filter(file => file.id !== id);
+    };
+
+    return { tabs, activeTabId, files, activeFileId, onTabClose };
   },
   mounted() {
     appEvents.emit('refreshResources');

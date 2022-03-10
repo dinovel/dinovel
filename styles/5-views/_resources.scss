@@ -8,12 +8,12 @@
   &__tabs {
     margin: 0.235rem;
     grid-area: panel;
+    overflow: hidden;
   }
 
   &__content {
     margin: 0.235rem;
     grid-area: content;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden;
   }
 }

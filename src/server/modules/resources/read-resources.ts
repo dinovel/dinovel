@@ -29,7 +29,7 @@ async function buildResourcesDirectoryMap(path: string, exts: string[], base = '
     if (path === entry.path) { continue; }
     if (entry.isFile) {
       const e = parse(entry.path);
-      map[e.name] = base + '/' + e.base;
+      map[e.base] = base + '/' + e.base;
     }
   }
 

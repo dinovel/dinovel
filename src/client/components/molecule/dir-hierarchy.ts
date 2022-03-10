@@ -1,5 +1,5 @@
 import { declareComponent } from 'dinovel/render/declare.ts';
-import { DnFileLink } from 'dinovel/widgets/__.ts';
+import { DnFileLink, DnAccordion } from 'dinovel/widgets/__.ts';
 import { computed } from 'vue';
 
 const template = /*html*/`
@@ -11,17 +11,25 @@ const template = /*html*/`
       :path="file[1]"
     ></dn-file-link>
   </div>
+  <div class="dn-dir-hierarchy__folders">
+    <dn-accordion v-for="folder in folders" :title="folder[0]">
+      <template v-slot:body>
+        <dn-dir-hierarchy :entries="folder[1]"></dn-dir-hierarchy>
+      </template>
+    </dn-accordion>
+  </div>
 </div>
 `;
 
 export const DirHierarchy = declareComponent({
+  name: 'DnDirHierarchy',
   props: {
     entries: {
       type: Object,
       default: () => ({}),
     },
   },
-  components: { DnFileLink },
+  components: { DnFileLink, DnAccordion },
   template,
   setup(props) {
     const files = computed(() => Object
@@ -30,7 +38,8 @@ export const DirHierarchy = declareComponent({
     );
 
     const folders = computed(() => Object
-      .values(props.entries).filter(e => typeof e === 'object'));
+      .entries(props.entries)
+      .filter(e => typeof e[1] === 'object'));
 
     return { files, folders };
   }

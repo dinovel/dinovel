@@ -1,5 +1,7 @@
 .#{$PRE}icon {
   user-select: none;
+  color: var(--color-primary);
+  stroke-width: 2.5;
 
   &-svg {
     .color-accent  {

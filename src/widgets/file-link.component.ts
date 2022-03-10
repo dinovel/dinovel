@@ -2,7 +2,7 @@ import { declareComponent, ComponentDeclaration } from 'dinovel/render/__.ts';
 import { DnIcon } from './icon.component.ts';
 
 const template = /*html*/`
-<a class="dn-file-link" @click="onClick" >
+<a class="dn-file-link" @click="onClick">
   <span class="dn-file-link-icon"><dn-icon :icon="iconName" /></span>
   <span class="dn-file-link-text">{{ name }}</span>
 </a>`;
@@ -29,11 +29,13 @@ export const DnFileLink = declareComponent({
     let iconName = props.icon;
     if (!iconName) {
       const ext = props.path.split('.').pop() ?? '';
-      console.warn(`FileLink: no icon found for extension "${ext}"`);
       if (['mp3', 'ogg', 'flac'].includes(ext)) { iconName = 'fileMusic'; }
       else if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(ext)) { iconName = 'fileImage'; }
       else if (['mp4', 'webm'].includes(ext)) { iconName = 'fileVideo'; }
-      else { iconName = 'file'; }
+      else {
+        console.warn(`FileLink: no icon found for extension "${ext}"`);
+        iconName = 'file';
+      }
     }
 
     function onClick() {

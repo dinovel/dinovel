@@ -7,6 +7,7 @@ export interface MenuItem {
 export type TabItem = {
   name: string;
   id: string;
+  closeable?: boolean;
 }
 
 export type Tabs = TabItem[];

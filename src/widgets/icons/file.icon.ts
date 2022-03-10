@@ -1,6 +1,6 @@
 export const file = /*svg*/`
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" class="dn-icon-svg">
-    <path class="color-accent"
-        d="M 7 2 L 7 48 L 43 48 L 43 14.59375 L 42.71875 14.28125 L 30.71875 2.28125 L 30.40625 2 Z M 9 4 L 29 4 L 29 16 L 41 16 L 41 46 L 9 46 Z M 31 5.4375 L 39.5625 14 L 31 14 Z" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="dn-icon-svg">
+  <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+  <polyline points="13 2 13 9 20 9"></polyline>
 </svg>
 `
