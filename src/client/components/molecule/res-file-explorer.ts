@@ -1,5 +1,5 @@
 import { declareComponent } from 'dinovel/render/declare.ts';
-import { DirHierarchy } from '../molecule/dir-hierarchy.ts';
+import { DirHierarchy } from '../atom/dir-hierarchy.ts';
 import { Ref } from 'dinovel/render/vue-models.ts';
 import { ref } from 'vue';
 import { appStore } from '../../store/store.ts';

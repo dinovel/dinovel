@@ -36,9 +36,13 @@ export const DnAccordion = declareComponent({
       type: String,
       default: '',
     },
+    initialOpen: {
+      type: Boolean,
+      default: false,
+    },
   },
-  setup(_, { emit }) {
-    const isOpen = ref(false);
+  setup(props, { emit }) {
+    const isOpen = ref(props.initialOpen);
 
     const onClick = () => {
       isOpen.value = !isOpen.value;
