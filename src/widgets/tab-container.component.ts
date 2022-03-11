@@ -11,6 +11,7 @@ const template = /*html*/`
       :class="{ 'dn-tab-container__tab--active': tab.id === activeTab }"
       v-for="tab in tabs"
       :key="tab.id"
+      @auxclick.prevent="onAuxClick($event, tab.id)"
     >
       <div
         @click="onTabClick(tab.id)"
@@ -18,8 +19,8 @@ const template = /*html*/`
       >{{ tab.name }}</div>
       <div
         v-if="tab.closeable"
-        @click="onTabClose(tab.id)"
         class="dn-tab-container__tab-close"
+        @click="onTabClose(tab.id)"
       ><dn-icon :icon="closeIcon" ></dn-icon></div>
     </div>
     <div
@@ -92,9 +93,15 @@ export const TabContainer = declareComponent({
       emit('tab-close', tabId);
     }
 
+    function onAuxClick($ev: MouseEvent, tabId: string) {
+      $ev.preventDefault();
+      if ($ev.button !== 1) { return }
+      onTabClose(tabId);
+    }
+
     watch(() => props.tabs, () => setInitialTab());
 
-    return { activeTab, setInitialTab, onTabClick, onTabClose };
+    return { activeTab, setInitialTab, onTabClick, onTabClose, onAuxClick };
   },
   mounted() {
     this.setInitialTab();

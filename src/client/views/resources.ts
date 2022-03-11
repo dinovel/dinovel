@@ -4,6 +4,7 @@ import { TabContainer, Tabs } from 'dinovel/widgets/__.ts';
 import { ref } from 'vue';
 import { appEvents } from '../events/app-events.ts';
 import { ResFileExplorer } from '../components/organism/res-file-explorer.ts';
+import { ResFileTabs } from '../components/organism/res-file-tabs.ts';
 
 const template = /*html*/`
 <div class="resources-view">
@@ -21,18 +22,9 @@ const template = /*html*/`
       <res-file-explorer></res-file-explorer>
     </template>
   </tab-container>
-  <tab-container
+  <res-file-tabs
     class="resources-view__content"
-    :tabs="files"
-    v-model="activeFileId"
-    :use-default-tab="true"
-    :tabs-on-top="true"
-    @tab-close="onTabClose"
-  >
-    <div class="resources-view__content-container">
-      file content here
-    </div>
-  </tab-container>
+  ></res-file-tabs>
 </div>
 `;
 
@@ -41,9 +33,9 @@ export const ResourcesView = declareComponent({
   components: {
     TabContainer,
     ResFileExplorer,
+    ResFileTabs,
   },
   setup() {
-
     const activeTabId = ref('file-list');
     const activeFileId = ref('');
 
@@ -55,15 +47,7 @@ export const ResourcesView = declareComponent({
       name: 'File Explorer',
     }] as Tabs);
 
-    const files: Ref<Tabs> = ref([{
-      id: '1',
-      name: 'someFileName.jpg',
-      closeable: true,
-    }, {
-      id: '2',
-      name: 'anotherFile.mp4',
-      closeable: true,
-    }] as Tabs);
+    const files: Ref<Tabs> = ref([] as Tabs);
 
     const onTabClose = (id: string) => {
       files.value = files.value.filter(file => file.id !== id);

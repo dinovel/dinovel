@@ -9,12 +9,16 @@ const template = /*html*/`
       v-for="file in files"
       :name="file[0]"
       :path="file[1]"
+      @click="onFileClick(file[1])"
     ></dn-file-link>
   </div>
   <div class="dn-dir-hierarchy__folders">
     <dn-accordion v-for="folder in folders" :title="folder[0]">
       <template v-slot:body>
-        <dn-dir-hierarchy :entries="folder[1]"></dn-dir-hierarchy>
+        <dn-dir-hierarchy
+          :entries="folder[1]"
+          @file-click="onFileClick"
+        ></dn-dir-hierarchy>
       </template>
     </dn-accordion>
   </div>
@@ -31,7 +35,7 @@ export const DirHierarchy = declareComponent({
   },
   components: { DnFileLink, DnAccordion },
   template,
-  setup(props) {
+  setup(props, { emit }) {
     const files = computed(() => Object
       .entries(props.entries)
       .filter(e => typeof e[1] === 'string')
@@ -41,6 +45,10 @@ export const DirHierarchy = declareComponent({
       .entries(props.entries)
       .filter(e => typeof e[1] === 'object'));
 
-    return { files, folders };
+    function onFileClick(path: string) {
+      emit('file-click', path);
+    }
+
+    return { files, folders, onFileClick };
   }
 });

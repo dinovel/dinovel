@@ -1,0 +1,9 @@
+.asset-render {
+  @include fill-parent;
+  @include flex-center;
+
+  & > .media {
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
