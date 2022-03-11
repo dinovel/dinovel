@@ -50,7 +50,7 @@ export const DnIcon = declareComponent({
         Dinovel.logger.error(`Icon "${props.icon}" not found.`);
       }
 
-      return value ?? DnIconList.get('default') ?? '';
+      return value || DnIconList.get('default') || '';
     });
 
     return {

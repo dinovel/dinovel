@@ -43,6 +43,9 @@
 
     &:hover {
       background-color: var(--color-primary);
+      svg {
+        color: var(--color-background);
+      }
     }
 
     &--active {
@@ -50,6 +53,27 @@
       &:hover {
         background-color: var(--color-background);
         cursor: default;
+        svg {
+          color: var(--color-primary);
+        }
+      }
+    }
+
+    &-label {
+      flex: 1 1 auto;
+      text-align: center;
+    }
+
+    &-close {
+      margin-left: 0.25rem;
+      width: 1rem;
+      height: 1rem;
+      min-width: 1rem;
+      min-height: 1rem;
+      cursor: pointer;
+
+      &:hover svg {
+        stroke-width: 4;
       }
     }
   }
@@ -76,7 +100,7 @@
         border-bottom: 1px solid var(--color-accent);
         border-left: none;
         flex: 0;
-        padding: 0 1rem;
+        padding: 0 0.5rem;
 
         &--active {
           border-top: 1px solid var(--color-accent);

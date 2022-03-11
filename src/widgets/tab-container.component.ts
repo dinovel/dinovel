@@ -1,6 +1,7 @@
 import { declareComponent, ComponentDeclaration } from 'dinovel/render/__.ts';
 import { computed, watch } from 'vue';
 import { Tabs } from "./_models.ts";
+import { DnIcon } from './icon.component.ts';
 
 const template = /*html*/`
 <div class="dn-tab-container" :class="{ 'dn-tab-container--invert': tabsOnTop }">
@@ -11,14 +12,15 @@ const template = /*html*/`
       v-for="tab in tabs"
       :key="tab.id"
     >
-      <span
+      <div
         @click="onTabClick(tab.id)"
         class="dn-tab-container__tab-label"
-      >{{ tab.name }}</span>
-      <span
+      >{{ tab.name }}</div>
+      <div
         v-if="tab.closeable"
         @click="onTabClose(tab.id)"
-      >X</span>
+        class="dn-tab-container__tab-close"
+      ><dn-icon :icon="closeIcon" ></dn-icon></div>
     </div>
     <div
       class="dn-tab-container__tab--space"
@@ -42,6 +44,7 @@ const template = /*html*/`
 
 export const TabContainer = declareComponent({
   template,
+  components: { DnIcon },
   props: {
     tabs: {
       type: Array as () => Tabs,
@@ -62,6 +65,10 @@ export const TabContainer = declareComponent({
     tabsOnTop: {
       type: Boolean,
       default: false,
+    },
+    closeIcon: {
+      type: String,
+      default: 'xCircle',
     }
   },
   setup(props, { emit }) {
