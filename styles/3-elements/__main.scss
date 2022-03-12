@@ -1,5 +1,5 @@
-@import 'html', 'scroll-bar', 'tooltip';
+@import 'html', 'scroll-bar';
 
-* {
-  box-sizing: border-box;
+*, *:after, *:before {
+  box-sizing: inherit;
 }

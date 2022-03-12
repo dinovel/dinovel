@@ -1,20 +1,25 @@
 import { declareComponent, ComponentDeclaration } from 'dinovel/render/__.ts';
 import { Dinovel } from 'dinovel/engine/dinovel.ts';
+import { DnIcon } from './icon.component.ts';
 
 const template = /*html*/`
 <button
   class="dn-button dn-button--event"
   :disabled="disabled"
   @click="onClick"
->{{ text }}</button>
+>
+  <dn-icon v-if="icon" class="dn-button__icon" :icon="icon"></dn-icon>
+  <span v-if="text" class="dn-button__text">{{ text }}</span>
+</button>
 `;
 
 export const EventButton = declareComponent({
   template,
+  components: { DnIcon },
   props: {
     text: {
       type: String,
-      default: 'Trigger Event',
+      default: '',
     },
     event: {
       type: String,
@@ -26,10 +31,15 @@ export const EventButton = declareComponent({
     disabled: {
       type: Boolean,
       default: false,
+    },
+    icon: {
+      type: String,
+      default: '',
     }
   },
   methods: {
     onClick() {
+      if (this.disabled) return;
       // deno-lint-ignore no-explicit-any
       Dinovel.events.for<any>().emit(this.event, this.eventData);
     }

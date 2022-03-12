@@ -10,12 +10,13 @@ export type ResourcePath = {
 export type ResourceMetadata = {
   category: ResourceCategory;
   tags: string[];
+  id: string;
 }
 
 export type Resource = ResourcePath & ResourceMetadata;
 
 export type ResourceMap = {
-  [key: string]: Resource;
+  [id: string]: Resource;
 }
 
 export type ResourceNames<T extends ResourceMap> = {
@@ -31,7 +32,7 @@ export type ResourceCatMap = {
 }
 
 export type AppResources = {
-  [key: string]: ResourceMap;
+  [folder: string]: ResourceMap;
 }
 
 export type AppNames = {
