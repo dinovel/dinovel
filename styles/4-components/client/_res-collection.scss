@@ -1,0 +1,17 @@
+.#{$PRE}res-collection {
+  &__top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    border-bottom: 1px solid var(--color-accent);
+    height: 2rem;
+
+    & > .dn-button {
+      & > .dn-icon {
+        min-width: 1.25rem;
+        min-height: 1.25rem;
+        font-size: 1.25rem;
+      }
+    }
+  }
+}

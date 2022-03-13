@@ -1,6 +1,6 @@
 import { declareComponent } from 'dinovel/render/declare.ts';
 import { AppRouterNames } from '../../router/app-router.ts';
-import { NavBar } from './nav-bar.ts';
+import { NavBar } from '../molecule/nav-bar.ts';
 import { ButtonReset } from '../atom/button-reset.ts';
 
 export const AppBar = declareComponent({

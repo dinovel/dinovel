@@ -11,7 +11,7 @@ export async function readResources(): Promise<ResourceState> {
   return {
     files: fileMap,
     resources: {},
-    names: {},
+    resMap: {},
     categories: DefaultCategories,
     extensions: DefaultExtensions,
   }

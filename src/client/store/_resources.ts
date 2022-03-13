@@ -8,6 +8,7 @@ import { basename } from 'deno/path/mod.ts';
 export type ResourcesViewState = {
   resources: Partial<ResourceState>;
   activeTab: string,
+  selected: string,
   tabs: ResourcesTabs,
 }
 
@@ -28,6 +29,7 @@ export const closeTab = createAction<string>(P('closeTab'));
 export const resourcesViewReducer = createReducer<ResourcesViewState>({
     tabs: [],
     activeTab: '',
+    selected: '',
     resources: {},
   },
   on(setActiveTab, (s, a) => ({ ...s, activeTab: a.payload })),

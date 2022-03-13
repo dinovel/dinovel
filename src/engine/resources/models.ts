@@ -31,11 +31,8 @@ export type ResourceCatMap = {
   [key in ResourceType]: ResourceCategory[];
 }
 
+/** Names to easly reference resources, multiple entries can have the same UUID  */
 export type AppResources = {
-  [folder: string]: ResourceMap;
-}
-
-export type AppNames = {
   // deno-lint-ignore no-explicit-any
   [key: string]: ResourceNames<any>;
 }

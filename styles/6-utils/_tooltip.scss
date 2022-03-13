@@ -177,6 +177,28 @@
   }
 }
 
+/* ------ RIGHT BOTTOM ------ */
+[data-tt].tt-right.tt-bottom {
+  &:after,
+  &:before {
+    bottom: 50%;
+    left: 100%;
+    bottom: auto;
+  }
+
+  &:before {
+    visibility: hidden;
+  }
+
+  &:hover {
+    &:after,
+    &:before {
+      -webkit-transform: translateX(12px);
+      transform:         translateX(12px);
+    }
+  }
+}
+
 /* ----- Hack to fix position ----- */
 
 .tt-left:before,

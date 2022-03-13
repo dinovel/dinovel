@@ -2,11 +2,11 @@ import { declareComponent } from 'dinovel/render/declare.ts';
 import { computedStore, obs } from 'dinovel/render/__.ts';
 import { appStore } from '../../store/store.ts';
 import { setActiveTab, closeTab } from '../../store/_resources.ts';
-import { TabContainer } from 'dinovel/widgets/__.ts';
-import { AssetRender } from '../molecule/asset-render.ts';
+import { DnTabContainer } from 'dinovel/widgets/__.ts';
+import { AssetRender } from '../atom/asset-render.ts';
 
 const template = /*html*/`
-<tab-container
+<dn-tab-container
   class="resources-file-tabs"
   v-model="activeFileId"
   :tabs="tabs"
@@ -16,13 +16,13 @@ const template = /*html*/`
   <template v-for="tab in tabs" :key="tab.id" #[tab.id]>
     <asset-render v-if="tab.type === 'file'" :path="tab.file" ></asset-render>
   </template>
-</tab-container>
+</dn-tab-container>
 `;
 
 export const ResFileTabs = declareComponent({
   template,
   components: {
-    TabContainer,
+    DnTabContainer,
     AssetRender,
   },
   setup() {

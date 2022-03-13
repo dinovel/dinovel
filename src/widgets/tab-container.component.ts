@@ -43,7 +43,7 @@ const template = /*html*/`
 </div>
 `;
 
-export const TabContainer = declareComponent({
+export const DnTabContainer = declareComponent({
   template,
   components: { DnIcon },
   props: {
@@ -109,7 +109,7 @@ export const TabContainer = declareComponent({
 });
 
 export default {
-  component: TabContainer,
+  component: DnTabContainer,
   tagName: 'dn-tab-container',
   description: 'A tab container',
   usageTemplate: /*html*/`
