@@ -12,10 +12,15 @@
       "unstable": false
     },
     "dev": {
-      "cmd": "deno run -A --import-map ./import_map.json ./src/cli/cli.ts dev",
+      "cmd": "deno run -A --import-map ./import_map.json --inspect ./src/cli/cli.ts dev",
       "desc": "Run Dinovel cli",
       "unstable": false,
       "watch": true
+    },
+    "gen": {
+      "cmd": "deno run -A --import-map ./import_map.json ./src/cli/cli.ts generate",
+      "desc": "Generate a new component",
+      "unstable": false
     }
   },
   "watch": false,

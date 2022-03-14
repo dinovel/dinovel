@@ -4,6 +4,7 @@ export interface RuntimeVersion {
   readonly typescriptVersion: string;
   readonly v8Version: string;
   readonly dinovelVersion: string;
+  readonly rootPath: string;
 }
 
 /** Deno runtime configuration */

@@ -1,0 +1,19 @@
+import { declareComponent } from 'dinovel/render/declare.ts';
+import { DnButtonEvent } from 'dinovel/widgets/__.ts';
+import { Ref } from 'dinovel/render/vue-models.ts';
+import { ref } from 'vue';
+
+const template = /*html*/`
+<div class="__name__">
+  <dn-button-event text="Trigger Event" :event="event"></dn-button-event>
+</div>
+`;
+
+export const __name__ = declareComponent({
+  template,
+  components: { DnButtonEvent },
+  setup() {
+    const event: Ref<string> = ref('noop');
+    return { event };
+  }
+});
