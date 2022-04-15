@@ -1,5 +1,6 @@
 import { EventsHandler } from 'dinovel/std/core/events.ts';
 import { LoggerService } from 'dinovel/std/logger.ts';
+import { valueMapStore } from 'dinovel/std/value-map/value-map-store.ts';
 import { DinovelCompilers } from "dinovel/compiler/compiler.ts";
 
 import { EngineEvents } from './events.ts';
@@ -18,6 +19,8 @@ export const Dinovel = {
   compilers: new DinovelCompilers(),
   /** Store */
   store: dinovelStore,
+  /** Value map store */
+  valuesMap: valueMapStore,
 };
 
 export function registerGlobal() {

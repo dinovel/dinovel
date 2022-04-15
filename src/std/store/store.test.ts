@@ -61,73 +61,75 @@ const getAppStore = () => new Store<AppState>({
   car: createCarReducer(),
 });
 
-Deno.test('[Store] Should access store state', () => {
-  const appStore = getAppStore();
+Deno.test('Store', async ctx => {
+  await ctx.step('Should access store state', () => {
+    const appStore = getAppStore();
 
-  let userState: UserState | undefined;
-  let carState: CarSate | undefined;
+    let userState: UserState | undefined;
+    let carState: CarSate | undefined;
 
-  appStore.select('user').subscribe({
-    next: (user) => userState = user,
+    appStore.select('user').subscribe({
+      next: (user) => userState = user,
+    });
+
+    appStore.subscribe('car', c => carState = c);
+
+    assertEquals(userState?.age, 50);
+    assertEquals(userState?.name, 'John Doe');
+    assertEquals(carState?.brand, 'Ford');
+    assertEquals(carState?.model, 'Fiesta');
   });
 
-  appStore.subscribe('car', c => carState = c);
+  await ctx.step('Should throw on state changes', () => {
+    const appStore = getAppStore();
 
-  assertEquals(userState?.age, 50);
-  assertEquals(userState?.name, 'John Doe');
-  assertEquals(carState?.brand, 'Ford');
-  assertEquals(carState?.model, 'Fiesta');
-});
+    const userState = appStore.select('user').value;
 
-Deno.test('[Store] Should throw on state changes', () => {
-  const appStore = getAppStore();
-
-  const userState = appStore.select('user').value;
-
-  assertThrows(() => userState.name = 'John');
-});
-
-Deno.test('[Store] Should merge new reducers', () => {
-  const appStore = getAppStore().merge<{ address: AddressState }>({
-    address: createAddressReducer(),
+    assertThrows(() => userState.name = 'John');
   });
 
-  const addressState = appStore.select('address').value;
-  const userState = appStore.select('user').value;
+  await ctx.step('Should merge new reducers', () => {
+    const appStore = getAppStore().merge<{ address: AddressState }>({
+      address: createAddressReducer(),
+    });
 
-  assertEquals(addressState.city, 'Anytown');
-  assertEquals(addressState.street, '123 Main St');
-  assertEquals(userState.age, 50);
-  assertEquals(userState.name, 'John Doe');
-});
+    const addressState = appStore.select('address').value;
+    const userState = appStore.select('user').value;
 
-Deno.test('[Store] Should dispatch actions', async () => {
+    assertEquals(addressState.city, 'Anytown');
+    assertEquals(addressState.street, '123 Main St');
+    assertEquals(userState.age, 50);
+    assertEquals(userState.name, 'John Doe');
+  });
 
-  const appStore = getAppStore();
+  await ctx.step('Should dispatch actions', async () => {
 
-  let userState = appStore.select('user').value;
-  appStore.select('user', c => userState = c);
+    const appStore = getAppStore();
 
-  assertEquals(userState.age, 50);
-  assertEquals(userState.name, 'John Doe');
+    let userState = appStore.select('user').value;
+    appStore.select('user', c => userState = c);
 
-  await appStore.dispatch(setUserAge(60));
+    assertEquals(userState.age, 50);
+    assertEquals(userState.name, 'John Doe');
 
-  assertEquals(userState.age, 60);
-  assertEquals(userState.name, 'John Doe');
+    await appStore.dispatch(setUserAge(60));
 
-});
+    assertEquals(userState.age, 60);
+    assertEquals(userState.name, 'John Doe');
 
-Deno.test('[Store] Should allow to export/import state', async () => {
-  const appStore = getAppStore();
-  await appStore.dispatch(setUserAge(60));
+  });
 
-  const exportValue = appStore.export();
+  await ctx.step('Should allow to export/import state', async () => {
+    const appStore = getAppStore();
+    await appStore.dispatch(setUserAge(60));
 
-  const appStore2 = getAppStore();
-  appStore2.import(exportValue);
+    const exportValue = appStore.export();
 
-  const userState = appStore2.select('user').value;
+    const appStore2 = getAppStore();
+    appStore2.import(exportValue);
 
-  assertEquals(userState.age, 60);
+    const userState = appStore2.select('user').value;
+
+    assertEquals(userState.age, 60);
+  });
 });
