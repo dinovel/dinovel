@@ -6,3 +6,4 @@ export * from './dialog.component.ts';
 export * from './file-link.component.ts';
 export * from './icon.component.ts';
 export * from './tab-container.component.ts';
+export * from './text-input.component.ts';

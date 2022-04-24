@@ -2515,3 +2515,7 @@ declare global {
   const defineExpose: _defineExpose
   const withDefaults: _withDefaults
 }
+
+export type ComputedRefImpl<T> = {
+  value: T
+}

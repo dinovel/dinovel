@@ -1,4 +1,4 @@
-import { IValueMap } from "./models.ts";
+import { IFullValueMap } from "./models.ts";
 import { isValue } from '../core/guards.ts';
 
 export function buildValueMap<T>(
@@ -6,7 +6,7 @@ export function buildValueMap<T>(
   serialize: (value: T) => string,
   parse: (value: string) => T,
   defaultValue: T,
-): IValueMap<T> {
+): IFullValueMap<T> {
   function S(value: T[]): string[];
   function S(value: T): string;
   function S(value: T | T[]): string | string[] {

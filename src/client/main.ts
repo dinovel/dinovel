@@ -1,5 +1,6 @@
 import { Render, VueObservable, useStoreStorage } from 'dinovel/render/__.ts';
 import { App } from 'dinovel/render/vue-models.ts';
+import { useDynamicForm, DEFAULT_FORM_CONTROLS } from 'dinovel/forms/__.ts';
 import { DinovelApp } from './app.ts';
 import { initDinovel, injectLibs } from './services/__.ts';
 import { appStore } from './store/store.ts';
@@ -14,6 +15,7 @@ class ClientRender extends Render {
 
   apply(app: App) {
     app.use(VueObservable);
+    useDynamicForm(app, DEFAULT_FORM_CONTROLS);
   }
 
   async beforeMount() {

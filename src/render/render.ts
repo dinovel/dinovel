@@ -1,6 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
 import { createApp } from 'vue';
-import type { MaybePromise } from 'dinovel/std/util-types.ts';
+import type { MaybePromise } from 'dinovel/std/core/types.ts';
 import type { ComponentDeclaration, DeclareComponentResult } from './declare.ts';
 import type { App } from './vue-models.ts';
 
@@ -21,10 +21,11 @@ export abstract class Render {
     this._entryComponent = entryComponent;
   }
 
-  public declareComponent(comp: ComponentDeclaration): void {
-    if (!comp || !comp.component) { return; }
+  public declareComponent(comp: ComponentDeclaration): Render {
+    if (!comp || !comp.component) { return this; }
     comp.component.__dinovel_props__ = comp;
     this._components[comp.tagName] = comp.component;
+    return this;
   }
 
   /** Build entry component */
