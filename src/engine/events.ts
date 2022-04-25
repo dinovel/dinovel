@@ -1,3 +1,5 @@
+import type { OpenDialogEvent, CloseDialogEvent } from 'dinovel/dialog/dialog.model.ts';
+
 export interface ExceptionEvents {
   /** Unhandled exception */
   exception: Error;
@@ -10,4 +12,11 @@ export interface UnknowEvent {
   void: never;
 }
 
-export type EngineEvents = ExceptionEvents & UnknowEvent;
+export interface DialogEvents {
+  /** Dialog is opened */
+  dnDialogOpen: OpenDialogEvent<unknown>;
+  /** Dialog is closed */
+  dnDialogClose: CloseDialogEvent<unknown>;
+}
+
+export type EngineEvents = ExceptionEvents & UnknowEvent & DialogEvents;

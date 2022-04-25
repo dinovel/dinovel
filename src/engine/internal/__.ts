@@ -1,2 +1,2 @@
 export * from './load-config.ts';
-export * from './runtime.ts';
+export * from './init.ts';

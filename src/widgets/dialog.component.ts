@@ -32,7 +32,7 @@ const template = /*html*/`
     <div class="dn-dialog__body">
       <slot></slot>
     </div>
-    <div v-if="hasFooter" class="dn-dialog__footer">
+    <div v-if="!hasFooter" class="dn-dialog__footer">
       <dn-button-event
         v-for="(action, index) in footerBtns"
         :key="index"

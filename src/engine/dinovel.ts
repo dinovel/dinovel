@@ -4,7 +4,7 @@ import { valueMapStore } from 'dinovel/std/value-map/value-map-store.ts';
 import { DinovelCompilers } from "dinovel/compiler/compiler.ts";
 
 import { EngineEvents } from './events.ts';
-import { getRuntime } from './internal/runtime.ts';
+import { getRuntime, getDialogHandler } from './internal/init.ts';
 import { dinovelStore } from "./store.ts";
 
 /** Global reference to Dinovel engine */
@@ -13,6 +13,8 @@ export const Dinovel = {
   logger: new LoggerService(),
   /** Dinovel runtime */
   get runtime() { return getRuntime(); },
+  /** Dinovel dialog handler */
+  get dialogs() { return getDialogHandler(); },
   /** Events handler */
   events: new EventsHandler<EngineEvents>(),
   /** Compilers */
