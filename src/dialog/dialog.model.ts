@@ -15,6 +15,7 @@ export interface DnDialogProps {
 
 export interface ResultDialogProps<T> extends DnDialogProps {
   result: Subject<DialogResult<T>>;
+  type: DialogType;
 }
 
 
@@ -42,3 +43,12 @@ export interface CloseDialogEvent<T> {
   data: DialogResult<T>
   props: ResultDialogProps<T>
 }
+
+export interface DialogTypeMap {
+  form: unknown;
+  alert: boolean;
+  confirm: boolean;
+  prompt: string;
+}
+
+export type DialogType = keyof DialogTypeMap;

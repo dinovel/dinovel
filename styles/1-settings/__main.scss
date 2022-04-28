@@ -1,8 +1,14 @@
 :root {
-  --color-background: #23153C;
-  --color-primary: #FF3F81;
-  --color-accent: #FF0C60;
-  --color-text: #faf2f5;
+  --rgb-backgound: 35,21,60;
+  --rgb-primary: 255,63,129;
+  --rgb-accent: 255,12,96;
+  --rgb-text: 250,242,245;
+
+  --color-background: rgba(var(--rgb-backgound),1.0);
+  --color-primary: rgba(var(--rgb-primary),1.0);
+  --color-accent: rgba(var(--rgb-accent),1.0);
+  --color-text: rgba(var(--rgb-text),1.0);
+
   --font-family: Verdana, Geneva, sans-serif;
   --font-size: 16px;
   --widget-height: 1.5625rem;

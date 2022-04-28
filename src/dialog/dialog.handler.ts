@@ -1,32 +1,33 @@
 import { Dinovel } from 'dinovel/engine/dinovel.ts';
 import { uuid } from 'dinovel/std/crypto.ts';
 import { IObservable, Subject } from "dinovel/std/reactive/__.ts";
-import { ResultDialogProps, DialogResult, DnDialogProps } from './dialog.model.ts';
+import { ResultDialogProps, DialogResult, DnDialogProps, DialogType, DialogTypeMap } from './dialog.model.ts';
 
 export class DialogHandler {
   // deno-lint-ignore no-explicit-any
   private readonly _openDialogs = new Map<string, ResultDialogProps<any>>();
 
-  public get openDialogs(): DnDialogProps[] {
-    return Array.from(this._openDialogs.values());
+  public get openDialogs() {
+    return this._openDialogs.values();
   }
 
-  public open<T>(props: Partial<DnDialogProps>): IObservable<DialogResult<T>> {
-    const result = new Subject<DialogResult<T>>();
+  public open<T extends DialogType>(type: T, props: Partial<DnDialogProps>): IObservable<DialogResult<DialogTypeMap[T]>> {
+    const result = new Subject<DialogResult<DialogTypeMap[T]>>();
 
-    const p: ResultDialogProps<T> = {
+    const p: ResultDialogProps<DialogTypeMap[T]> = {
       ...props,
+      type,
       id: props?.id ?? uuid(),
-      result: new Subject<DialogResult<T>>()
+      result: new Subject<DialogResult<DialogTypeMap[T]>>(),
     };
 
     p.title = props.title || '';
     p.icon = props.icon || '';
-    p.width = props.width || '350px';
-    p.height = props.height || '200px';
+    p.width = props.width || 'auto';
+    p.height = props.height || 'auto';
     p.closable = props.closable || false;
-    p.modal = props.modal || false;
-    p.fixed = props.fixed || false;
+    p.modal = props.modal || true;
+    p.fixed = props.fixed || true;
 
     const sub = p.result.subscribe(r => {
       this._openDialogs.delete(p.id);

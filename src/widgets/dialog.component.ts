@@ -20,11 +20,12 @@ const template = /*html*/`
         :icon="icon"
       ></dn-icon>
       <div v-if="title" class="dn-dialog__title">{{ title }}</div>
-      <div
+      <dn-icon
         v-if="closable"
         class="dn-dialog__close"
-        @click="close"
-      ></div>
+        icon="xCircle"
+        @click="closeDialog"
+      ></dn-icon>
     </div>
     <div v-else class="dn-dialog__header">
       <slot name="header"></slot>
@@ -32,7 +33,7 @@ const template = /*html*/`
     <div class="dn-dialog__body">
       <slot></slot>
     </div>
-    <div v-if="!hasFooter" class="dn-dialog__footer">
+    <div v-if="!hasFooter && footerBtns.length" class="dn-dialog__footer">
       <dn-button-event
         v-for="(action, index) in footerBtns"
         :key="index"
@@ -43,7 +44,7 @@ const template = /*html*/`
         :disabled="action.disabled || action.disabledFn"
       ></dn-button-event>
     </div>
-    <div v-else class="dn-dialog__footer">
+    <div v-else-if="hasFooter" class="dn-dialog__footer">
       <slot name="footer"></slot>
     </div>
   </div>
@@ -68,11 +69,11 @@ export const DnDialog = declareComponent({
     },
     width: {
       type: String,
-      default: '25rem',
+      default: 'auto',
     },
     height: {
       type: String,
-      default: '18.75rem',
+      default: 'auto',
     },
     closable: {
       type: Boolean,
@@ -97,7 +98,7 @@ export const DnDialog = declareComponent({
       'dn-dialog--modal': props.modal,
     }));
 
-    function onClose() { emit('close'); }
+    function closeDialog() { emit('close'); }
 
     const hasHeader = computed(() => !!slots.header);
     const hasFooter = computed(() => !!slots.footer);
@@ -107,7 +108,7 @@ export const DnDialog = declareComponent({
       disabledFn: computed(() => !!(e.disabledFn && e.disabledFn())),
     })))
 
-    return { classNames, onClose, hasHeader, hasFooter, footerBtns };
+    return { classNames, closeDialog, hasHeader, hasFooter, footerBtns };
   }
 });
 

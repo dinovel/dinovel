@@ -17,6 +17,8 @@ export interface TypescriptResult {
 export async function compileTypescript(options: TypescriptOptions, cwd?: string): Promise<TypescriptResult> {
   const { input, output, importMap, unstable, config } = options;
 
+  console.time('compileTypescript');
+
   const args = ['deno', 'bundle'];
   if (importMap) { args.push('--import-map', importMap); }
   if (unstable) { args.push('--unstable'); }
@@ -28,6 +30,8 @@ export async function compileTypescript(options: TypescriptOptions, cwd?: string
     environment: {},
     args,
   });
+
+  console.timeEnd('compileTypescript');
 
   const message = success ? 'Typescript compiled successfully' : stderr;
   return {
