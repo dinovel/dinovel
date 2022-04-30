@@ -21,10 +21,16 @@ export type FileTabItem = TabItem & {
 
 const P = (m: string) => `[RESOURCES]>${m}`;
 
+/* Set tab to active for given id */
 export const setActiveTab = createAction<string>(P('setActiveTab'));
+/* Set resource collection */
 export const setResources = createAction<ResourceState>(P('setResources'));
+/* Add new tab */
 export const addFileTab = createAction<string>(P('addFileTab'));
+/* Close tab */
 export const closeTab = createAction<string>(P('closeTab'));
+/* Add new resource group */
+export const addResourceGroup = createAction<string>(P('addResourceGroup'));
 
 export const resourcesViewReducer = createReducer<ResourcesViewState>({
     tabs: [],
@@ -57,5 +63,20 @@ export const resourcesViewReducer = createReducer<ResourcesViewState>({
     ];
 
     return { ...s, tabs, activeTab: newTab.id };
+  }),
+  on(addResourceGroup, (s, { payload }) => {
+    const appRes = {
+      ...(s.resources.resMap ?? {}),
+    }
+    if (appRes[payload]) { return s; }
+    appRes[payload] = {};
+
+    return {
+      ...s,
+      resources: {
+        ...s.resources,
+        resMap: appRes
+      },
+    }
   }),
 );

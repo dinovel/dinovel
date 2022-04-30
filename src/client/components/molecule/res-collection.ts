@@ -1,7 +1,11 @@
 import { declareComponent } from 'dinovel/render/declare.ts';
-import { Ref } from 'dinovel/render/vue-models.ts';
 import { DnButtonEvent } from 'dinovel/widgets/__.ts';
+import { DirHierarchy } from '../atom/dir-hierarchy.ts';
+import { Dinovel } from 'dinovel/engine/dinovel.ts';
+import { Ref } from 'dinovel/render/vue-models.ts';
 import { ref } from 'vue';
+import { appStore } from '../../store/store.ts';
+import { addResourceGroup } from "../../store/_resources.ts";
 
 const template = /*html*/`
 <div class="dn-res-collection">
@@ -10,50 +14,52 @@ const template = /*html*/`
       class="dn-button--simple"
       event="noop"
       icon="folderPlus"
-      :disabled="showNewGroup"
-      @click="showAddNewGroup"
+      @click="addNewGroup"
     ></dn-button-event>
   </div>
-  <div v-if="showNewGroup" class="dn-res-collection__new">
-    <input
-      ref="input"
-      type="text"
-      v-model="newGroupName"
-      placeholder="group name"
-      @keyup.enter="addNewGroup"
-      @keyup.escape="showNewGroup = false"
-    />
+  <div class="dn-res-collection__groups">
+    <dir-hierarchy
+      :entries="appResources"
+      @file-click="onResourceClick"
+    ></dir-hierarchy>
   </div>
 </div>
 `;
 
 export const ResCollection = declareComponent({
   template,
-  components: { DnButtonEvent },
+  components: {
+    DnButtonEvent,
+    DirHierarchy,
+  },
   setup() {
-    const input: Ref<HTMLElement | null> = ref(null);
-    const names = ref([]);
-    const newGroupName = ref('');
-    const showNewGroup = ref(false);
+    // deno-lint-ignore no-explicit-any
+    const appResources: Ref<any> = ref({});
+
+    appStore.select('resourcesView', r => {
+      appResources.value = r.resources.resMap ?? {}
+    });
 
     function addNewGroup() {
-      if (!newGroupName.value) return;
-      names.value.push(newGroupName.value);
-      newGroupName.value = '';
-      showNewGroup.value = false;
+      const dialog = Dinovel.dialogs.open('prompt', {
+        closable: true,
+        title: 'New Resource Group',
+      });
+      const sub = dialog.subscribe(r => {
+        if (!r.hasValue) return;
+        appStore.dispatch(addResourceGroup(r.value));
+        dialog.unsubscribe(sub);
+      });
     }
 
-    function showAddNewGroup() {
-      showNewGroup.value = true;
-      setTimeout(() => { console.log(input.value) }, 300);
+    function onResourceClick() {
+
     }
 
     return {
-      showNewGroup,
-      newGroupName,
-      names,
       addNewGroup,
-      showAddNewGroup,
+      appResources,
+      onResourceClick,
     };
   }
 });
