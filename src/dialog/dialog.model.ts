@@ -1,7 +1,7 @@
 import { ButtonEventProps } from "dinovel/widgets/button-event.component.ts";
 import { Subject } from 'dinovel/std/reactive/subject.ts';
 
-export interface DnDialogProps {
+export interface DnDialogComponentProps {
   id: string;
   title?: string;
   icon?: string;
@@ -13,9 +13,11 @@ export interface DnDialogProps {
   actions?: ButtonEventProps[];
 }
 
-export interface ResultDialogProps<T> extends DnDialogProps {
-  result: Subject<DialogResult<T>>;
+export interface DnDialogProps<T> {
+  comp: DnDialogComponentProps;
   type: DialogType;
+  result: Subject<DialogResult<T>>;
+  initialValue?: T;
 }
 
 
@@ -35,13 +37,13 @@ export type DialogResult<T> = DialogResultValue<T> | DialogResultCancel;
 
 export interface OpenDialogEvent<T> {
   id: string;
-  props: ResultDialogProps<T>;
+  props: DnDialogProps<T>;
 }
 
 export interface CloseDialogEvent<T> {
   id: string;
   data: DialogResult<T>
-  props: ResultDialogProps<T>
+  props: DnDialogProps<T>
 }
 
 export interface DialogTypeMap {

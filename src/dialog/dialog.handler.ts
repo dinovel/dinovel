@@ -1,43 +1,46 @@
 import { Dinovel } from 'dinovel/engine/dinovel.ts';
 import { uuid } from 'dinovel/std/crypto.ts';
 import { IObservable, Subject } from "dinovel/std/reactive/__.ts";
-import { ResultDialogProps, DialogResult, DnDialogProps, DialogType, DialogTypeMap } from './dialog.model.ts';
+import {  DialogResult, DnDialogProps, DialogType, DialogTypeMap, DnDialogComponentProps } from './dialog.model.ts';
 
 export class DialogHandler {
   // deno-lint-ignore no-explicit-any
-  private readonly _openDialogs = new Map<string, ResultDialogProps<any>>();
+  private readonly _openDialogs = new Map<string, DnDialogProps<any>>();
 
   public get openDialogs() {
     return this._openDialogs.values();
   }
 
-  public open<T extends DialogType>(type: T, props: Partial<DnDialogProps>): IObservable<DialogResult<DialogTypeMap[T]>> {
+  public open<T extends DialogType>(type: T, props: Partial<DnDialogComponentProps>, initialValue?: DialogTypeMap[T]): IObservable<DialogResult<DialogTypeMap[T]>> {
     const result = new Subject<DialogResult<DialogTypeMap[T]>>();
 
-    const p: ResultDialogProps<DialogTypeMap[T]> = {
-      ...props,
+    const p: DnDialogProps<DialogTypeMap[T]> = {
+      initialValue,
       type,
-      id: props?.id ?? uuid(),
-      result: new Subject<DialogResult<DialogTypeMap[T]>>(),
+      comp: {
+        ...props,
+        id: props?.id ?? uuid(),
+      },
+      result: new Subject(),
     };
 
-    p.title = props.title || '';
-    p.icon = props.icon || '';
-    p.width = props.width || 'auto';
-    p.height = props.height || 'auto';
-    p.closable = props.closable || false;
-    p.modal = props.modal || true;
-    p.fixed = props.fixed || true;
+    p.comp.title = props.title || '';
+    p.comp.icon = props.icon || '';
+    p.comp.width = props.width || 'auto';
+    p.comp.height = props.height || 'auto';
+    p.comp.closable = props.closable || false;
+    p.comp.modal = props.modal || true;
+    p.comp.fixed = props.fixed || true;
 
     const sub = p.result.subscribe(r => {
-      this._openDialogs.delete(p.id);
+      this._openDialogs.delete(p.comp.id);
       result.next(r);
       sub.unsubscribe();
-      Dinovel.events.emit('dnDialogClose', { id: p.id, data: r, props: p });
+      Dinovel.events.emit('dnDialogClose', { id: p.comp.id, data: r, props: p });
     });
 
-    this._openDialogs.set(p.id, p);
-    Dinovel.events.emit('dnDialogOpen', { id: p.id, props: p });
+    this._openDialogs.set(p.comp.id, p);
+    Dinovel.events.emit('dnDialogOpen', { id: p.comp.id, props: p });
 
     return result;
   }
