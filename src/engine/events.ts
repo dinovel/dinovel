@@ -1,22 +1,10 @@
-import type { OpenDialogEvent, CloseDialogEvent } from 'dinovel/dialog/dialog.model.ts';
-
-export interface ExceptionEvents {
-  /** Unhandled exception */
-  exception: Error;
+export interface DinovelEvents {
+  /** Called when dinovel has started */
+  started: void;
+  /**
+   * Called to stop dinovel engine
+   *
+   * A message can be passed to the stop method to inform the user about the reason for stopping.
+   */
+  stop: string;
 }
-
-export interface UnknowEvent {
-  /** Unknown event with data */
-  unknwon: unknown;
-  /** Unknown event */
-  void: never;
-}
-
-export interface DialogEvents {
-  /** Dialog is opened */
-  dnDialogOpen: OpenDialogEvent<unknown>;
-  /** Dialog is closed */
-  dnDialogClose: CloseDialogEvent<unknown>;
-}
-
-export type EngineEvents = ExceptionEvents & UnknowEvent & DialogEvents;

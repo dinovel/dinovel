@@ -1,80 +1,150 @@
-import { resolve } from 'deno/path/mod.ts';
-import { Application } from 'oak';
+import { Application, Router } from 'oak';
+import type { InitServerOptions } from './server-options.ts';
+import { Plugin, DinovelCore, initHandler, DinovelEvents, ScriptSrc } from 'dinovel/engine/mod.ts';
+import { EventsHandler } from "dinovel/std/events.ts";
+import { ESBundler, SassBundler } from 'dinovel/bundlers/mod.ts';
+import { buildURL } from 'dinovel/std/path.ts';
+import { parse } from 'deno/path/mod.ts';
 
-import { serverEvents } from './infra/events.ts';
-import { registerMiddleware } from './middleware/__.ts';
-import type { DevServerConfig } from 'dinovel/std/core/config.ts';
+import { getPlugins } from './plugins/__.ts';
 
-export class Server {
-  private readonly _options: DevServerConfig;
-  private readonly _middleware: ((app: Application) => void)[] = [];
-  private _controller?: AbortController;
-  private _hasStarted = false;
+/**
+ * Start a new server.
+ *
+ * @param opt options for the server
+ * @param userPlugins plugins to load
+ * @param defaults use default plugins
+ */
+export async function startDinovelServer(
+  opt: InitServerOptions,
+  userPlugins: Plugin[] = [],
+  defaults = true
+): Promise<void> {
 
-  public get options(): DevServerConfig {
-    return this._options;
-  }
+  const plugins = getPlugins(defaults, userPlugins);
+  const app = new Application();
+  const router = new Router();
+  const controler = new AbortController();
+  let started = false;
 
-  constructor(options: DevServerConfig) {
-    this._options = {
-      ...options,
-      static: resolve(options.static),
-      assets: resolve(options.assets),
+  console.log('Compiling sources...');
+  const scripts = await bundleScritps(opt.inject);
+  const style = bundleStyles(opt.style);
+
+  const core: DinovelCore = {
+    events: new EventsHandler<DinovelEvents>(),
+    engine: {
+      type: 'server',
+      version: '0.0.0',
+      title: opt.title,
+      app,
+      router,
+      scripts,
+      get running() { return started; },
+      style,
     }
   }
 
-  public use(middleware: (app: Application) => void): void {
-    this._middleware.unshift(middleware);
+  console.log('Preloading plugins...');
+  for (const plugin of plugins) {
+    await plugin.inject?.call(plugin, core);
   }
 
-  public async start(): Promise<number> {
-    if (this._hasStarted) { return 0; }
-    const app = this.buildApp();
-    this._controller = new AbortController();
+  app.use(router.routes());
+  app.use(router.allowedMethods());
+  initHandler.init(core);
 
-    try {
-      this._hasStarted = true;
-      await app.listen({
-        port: this._options.port,
-        signal: this._controller.signal,
-      });
-      return 0;
-    } catch (error) {
-      console.error(error);
-      return 1;
+  console.log('Starting server...');
+  const awaiter = app.listen({
+    port: 8666,
+    signal: controler.signal,
+  });
+  started = true;
+
+  console.log('Starting plugins...');
+  for (const plugin of plugins) {
+    await plugin.start?.call(plugin, core);
+  }
+
+  console.log('Server started at: http://localhost:8666');
+  await awaiter;
+
+  for (const plugin of plugins) {
+    await plugin.stop?.call(plugin, core);
+  }
+
+}
+
+async function bundleScritps(paths: URL[]): Promise<ScriptSrc[]> {
+  const results: ScriptSrc[] = [];
+
+  const bundler = new ESBundler({
+    banner: '// INJECTED',
+    drop: [],
+    incremental: true,
+    keepNames: false,
+    logLevel: 'verbose',
+    logLimit: 15,
+    minify: false,
+    root: '',
+    treeShaking: true,
+    importMapURL: buildURL('./import_map.json'),
+  });
+
+  console.log('Compiling client scripts...');
+  for (const path of paths) {
+    const name = parse(path.pathname).name;
+    console.log(`Compiling ${name}...`);
+    const res = await bundler.bundle(path);
+
+    if (res.warnings.length) {
+      console.warn(`Warnings for ${name}:`);
+      for (const warning of res.warnings) {
+        console.warn(warning);
+      }
     }
+
+    if (res.errors.length) {
+      for (const error of res.errors) {
+        console.error(error);
+      }
+      throw new Error(`Error compiling ${name}`);
+    }
+
+    if (!res.outputFiles) {
+      throw new Error(`No output files for ${name}`);
+    }
+
+    const src = res.outputFiles[0].text;
+    results.push({ name, src });
+  }
+  console.log('Client scripts compiled.');
+
+  return results;
+}
+
+function bundleStyles(url: URL): string {
+  console.log('Compiling styles...');
+  const bundler = new SassBundler({
+    quiet: false,
+    style: 'expanded',
+  });
+
+  const fullName = url.pathname;
+
+  const style = bundler.bundle(fullName).to_string();
+
+  if (!style) {
+    throw new Error(`No style for ${fullName}`);
   }
 
-  public stop(): void {
-    if (!this._hasStarted) { return; }
-    this._controller?.abort();
-    this._hasStarted = false;
+  if (typeof style === 'string') {
+    return style;
   }
 
-  private buildApp(): Application {
-    const app = new Application({
-      logErrors: this._options.logErrors,
-    });
-
-    this.registerGlobalEvents(app);
-
-    this._middleware.forEach((middleware) => {
-      middleware(app);
-    });
-
-    registerMiddleware(app, this._options);
-
-    return app;
+  for (const p of style.entries()) {
+    return p[1];
   }
 
-  private registerGlobalEvents(app: Application): void {
-    app.addEventListener('error', (event: unknown) => {
-      serverEvents.emit('serverError', event as ErrorEvent);
-    });
-
-    app.addEventListener('listen', () => {
-      serverEvents.emit('serverStart', this._options.port);
-      serverEvents.emit('publicEvent', 'ready');
-    });
-  }
+  throw new Error(`No style for ${fullName}`);
 }
