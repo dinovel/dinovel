@@ -28,7 +28,7 @@ export async function startDinovelServer(
   const controler = new AbortController();
   let started = false;
 
-  logger.info('Compiling sources...');
+  logger.debug('Compiling sources...');
   const scripts = await bundleScritps(opt.inject);
   const style = bundleStyles(opt.style);
 
@@ -46,7 +46,7 @@ export async function startDinovelServer(
     }
   }
 
-  logger.info('Preloading plugins...');
+  logger.debug('Preloading plugins...');
   for (const plugin of plugins) {
     await plugin.inject?.call(plugin, core);
   }
@@ -55,14 +55,14 @@ export async function startDinovelServer(
   app.use(router.allowedMethods());
   initHandler.init(core);
 
-  logger.info('Starting server...');
+  logger.debug('Starting server...');
   const awaiter = app.listen({
     port: 8666,
     signal: controler.signal,
   });
   started = true;
 
-  logger.info('Starting plugins...');
+  logger.debug('Starting plugins...');
   for (const plugin of plugins) {
     await plugin.start?.call(plugin, core);
   }
@@ -92,10 +92,10 @@ async function bundleScritps(paths: URL[]): Promise<ScriptSrc[]> {
     importMapURL: buildURL('./import_map.json'),
   });
 
-  logger.info('Compiling client scripts...');
+  logger.debug('Compiling client scripts...');
   for (const path of paths) {
     const name = parse(path.pathname).name;
-    logger.info(`Compiling ${name}...`);
+    logger.debug(`Compiling ${name}...`);
     const res = await bundler.bundle(path);
 
     if (res.warnings.length) {
@@ -119,24 +119,22 @@ async function bundleScritps(paths: URL[]): Promise<ScriptSrc[]> {
     const src = res.outputFiles[0].text;
     results.push({ name, src });
   }
-  logger.info('Client scripts compiled.');
+  logger.debug('Client scripts compiled.');
 
   return results;
 }
 
-function bundleStyles(url: URL): string {
-  logger.info('Compiling styles...');
+function bundleStyles(url: string): string {
+  logger.debug('Compiling styles...');
   const bundler = new SassBundler({
     quiet: false,
     style: 'expanded',
   });
 
-  const fullName = url.pathname;
-
-  const style = bundler.bundle(fullName).to_string();
+  const style = bundler.bundle(url).to_string();
 
   if (!style) {
-    throw new Error(`No style for ${fullName}`);
+    throw new Error(`No style for ${url}`);
   }
 
   if (typeof style === 'string') {
@@ -147,5 +145,5 @@ function bundleStyles(url: URL): string {
     return p[1];
   }
 
-  throw new Error(`No style for ${fullName}`);
+  throw new Error(`No style for ${url}`);
 }

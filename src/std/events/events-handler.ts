@@ -2,7 +2,7 @@
 import type { EventBridge } from './event-bridge.ts';
 import { buildEventMessage, EventMessage } from './event-message.ts';
 import { Observable, Subject, Subscription } from 'rxjs';
-import { Keys } from "../typing.ts";
+import { Keys } from "../helpers/typing.ts";
 
 /** Handle engine envents */
 export class EventsHandler<T extends object> {

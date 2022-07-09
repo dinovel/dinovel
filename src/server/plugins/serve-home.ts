@@ -40,7 +40,6 @@ export class ServeHomePlugin implements Plugin {
       const path = `/${s.name}.js`;
       scriptsImports += /*html*/`<script src="${path}" ></script>\n`;
     }
-    scriptsImports += /*html*/`<script>console.log("POTATOS!!")</script>\n`;
     const styleImport = /*html*/`<link rel="stylesheet" href="/style.css">\n`;
 
     const htmlResponse = this.#html

@@ -10,7 +10,7 @@ export class SassBundler {
 
   public bundle(entry: string) {
     return sass([entry], {
-      load_paths: [entry],
+      load_paths: [],
       quiet: this.#opt.quiet,
       style: this.#opt.style,
     })
