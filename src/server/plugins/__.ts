@@ -1,6 +1,7 @@
 import { Plugin } from 'dinovel/engine/mod.ts';
 import { logger } from 'dinovel/std/logger.ts';
 
+import { ServeAssetsPlugin } from './serve-assets.ts';
 import { ServeStylePlugin } from './serve-style.ts';
 import { ServerEventsPlugin } from './server-events.ts';
 import { ServeScriptsPlugin } from './serve-scripts.ts';
@@ -12,6 +13,7 @@ export function getPlugins(useDefaults: boolean, userPlugins: Plugin[]): Plugin[
     new ServerEventsPlugin(),
     new ServeStylePlugin(),
     new ServeScriptsPlugin(),
+    new ServeAssetsPlugin(),
     ...userPlugins
   ] : userPlugins;
 
