@@ -1,5 +1,6 @@
 import { StoreModules, Module, StoreState, StorePlugin, Action } from './models.ts';
 import { Observable } from 'rxjs';
+import { logger } from '../logger.ts';
 
 /**
  * Store state
@@ -102,7 +103,7 @@ export class Store<T extends StoreState> {
     this.callPlugins(p => p.import?.call(p, obj));
     for (const modKey of Object.keys(this.#modules)) {
       if (!this.#modules[modKey]) {
-        console.error(`Import Error: Module ${modKey} does not exist`);
+        logger.error(`Import Error: Module ${modKey} does not exist`);
         continue;
       }
 

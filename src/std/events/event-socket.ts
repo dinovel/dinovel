@@ -1,5 +1,6 @@
 import { Observable, Subject } from "rxjs";
 import { EventMessage } from "./event-message.ts";
+import { logger } from "../logger.ts";
 
 export class EventSocket {
   private readonly _listner = new Subject<EventMessage<unknown>>();
@@ -41,7 +42,7 @@ export class EventSocket {
 
   public init(): void {
     try {
-      console.log('Connecting to events websocket...');
+      logger.info('Connecting to events websocket...');
       this._ready = false;
 
       if (this._websocket instanceof WebSocket) {
@@ -49,15 +50,15 @@ export class EventSocket {
         this._websocket.onmessage = e => this.onMessage(e);
         this._websocket.onclose = e => this.onClose(e);
         this._ready = true;
-        console.log('Websocket connected');
+        logger.info('Websocket connected');
       }
     } catch (ex) {
-      console.error('Error connecting to websocket', ex);
+      logger.error('Error connecting to websocket', ex);
     }
   }
 
   protected onClose(ev: CloseEvent): void {
-    console.log('Websocket closed', ev.reason);
+    logger.info('Websocket closed', ev.reason);
     this._ready = false;
     this._websocket = undefined;
     this._close$.next();
@@ -68,12 +69,12 @@ export class EventSocket {
       const message = JSON.parse(ev.data) as EventMessage<unknown>;
       this._listner.next(message);
     } catch (e) {
-      console.error('Error parsing message', e, ev);
+      logger.error('Error parsing message', e, ev);
     }
   }
 
   private onOpen() {
-    console.log('Websocket opened');
+    logger.info('Websocket opened');
     this._ready = true;
     for (const event of this._pending) {
       this.send(event);

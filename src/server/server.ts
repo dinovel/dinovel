@@ -5,6 +5,7 @@ import { EventsHandler } from "dinovel/std/events.ts";
 import { ESBundler, SassBundler } from 'dinovel/bundlers/mod.ts';
 import { buildURL } from 'dinovel/std/path.ts';
 import { parse } from 'deno/path/mod.ts';
+import { logger } from 'dinovel/std/logger.ts';
 
 import { getPlugins } from './plugins/__.ts';
 
@@ -27,7 +28,7 @@ export async function startDinovelServer(
   const controler = new AbortController();
   let started = false;
 
-  console.log('Compiling sources...');
+  logger.info('Compiling sources...');
   const scripts = await bundleScritps(opt.inject);
   const style = bundleStyles(opt.style);
 
@@ -45,7 +46,7 @@ export async function startDinovelServer(
     }
   }
 
-  console.log('Preloading plugins...');
+  logger.info('Preloading plugins...');
   for (const plugin of plugins) {
     await plugin.inject?.call(plugin, core);
   }
@@ -54,19 +55,19 @@ export async function startDinovelServer(
   app.use(router.allowedMethods());
   initHandler.init(core);
 
-  console.log('Starting server...');
+  logger.info('Starting server...');
   const awaiter = app.listen({
     port: 8666,
     signal: controler.signal,
   });
   started = true;
 
-  console.log('Starting plugins...');
+  logger.info('Starting plugins...');
   for (const plugin of plugins) {
     await plugin.start?.call(plugin, core);
   }
 
-  console.log('Server started at: http://localhost:8666');
+  logger.info('Server started at: http://localhost:8666');
   await awaiter;
 
   for (const plugin of plugins) {
@@ -91,22 +92,22 @@ async function bundleScritps(paths: URL[]): Promise<ScriptSrc[]> {
     importMapURL: buildURL('./import_map.json'),
   });
 
-  console.log('Compiling client scripts...');
+  logger.info('Compiling client scripts...');
   for (const path of paths) {
     const name = parse(path.pathname).name;
-    console.log(`Compiling ${name}...`);
+    logger.info(`Compiling ${name}...`);
     const res = await bundler.bundle(path);
 
     if (res.warnings.length) {
-      console.warn(`Warnings for ${name}:`);
+      logger.warning(`Warnings for ${name}:`);
       for (const warning of res.warnings) {
-        console.warn(warning);
+        logger.warning('[ESLint]', warning);
       }
     }
 
     if (res.errors.length) {
       for (const error of res.errors) {
-        console.error(error);
+        logger.error('[ESLint]', error);
       }
       throw new Error(`Error compiling ${name}`);
     }
@@ -118,13 +119,13 @@ async function bundleScritps(paths: URL[]): Promise<ScriptSrc[]> {
     const src = res.outputFiles[0].text;
     results.push({ name, src });
   }
-  console.log('Client scripts compiled.');
+  logger.info('Client scripts compiled.');
 
   return results;
 }
 
 function bundleStyles(url: URL): string {
-  console.log('Compiling styles...');
+  logger.info('Compiling styles...');
   const bundler = new SassBundler({
     quiet: false,
     style: 'expanded',

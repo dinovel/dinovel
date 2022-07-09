@@ -33,10 +33,16 @@ export type LogOptionExtra = {
 }
 
 export interface LoggerEngine {
+  /** Error log */
   error(message: string, ...params: unknown[]): Promise<unknown> | unknown;
+  /** Warning log */
   warning(message: string, ...params: unknown[]): Promise<unknown> | unknown;
+  /** Info log */
   info(message: string, ...params: unknown[]): Promise<unknown> | unknown;
+  /** Debug log */
   debug(message: string, ...params: unknown[]): Promise<unknown> | unknown;
+  /** Internal Dinovel log */
   engine(message: string, ...params: unknown[]): Promise<unknown> | unknown;
+  /** Default log level */
   default(message: string, ...params: unknown[]): Promise<unknown> | unknown;
 }
