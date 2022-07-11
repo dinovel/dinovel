@@ -1,13 +1,13 @@
 import { Application, Router } from 'oak';
 import type { InitServerOptions } from './server-options.ts';
-import { Plugin, DinovelCore, initHandler, DinovelEvents, ScriptSrc } from 'dinovel/engine/mod.ts';
+import { Plugin, DinovelCore, initHandler, DinovelEvents } from 'dinovel/engine/mod.ts';
 import { EventsHandler } from "dinovel/std/events.ts";
-import { ESBundler, SassBundler } from 'dinovel/bundlers/mod.ts';
-import { buildURL } from 'dinovel/std/path.ts';
-import { parse } from 'deno/path/mod.ts';
 import { logger } from 'dinovel/std/logger.ts';
 
+import { ScriptWatcher } from './utils/script-watcher.ts';
 import { getPlugins } from './plugins/__.ts';
+import { SassWatcher } from "./utils/sass-watcher.ts";
+import { readEnv } from './utils/env-reader.ts';
 
 /**
  * Start a new server.
@@ -26,11 +26,8 @@ export async function startDinovelServer(
   const app = new Application();
   const router = new Router();
   const controler = new AbortController();
+  const config = readEnv();
   let started = false;
-
-  logger.debug('Compiling sources...');
-  const scripts = await bundleScritps(opt.inject);
-  const style = bundleStyles(opt.style);
 
   const core: DinovelCore = {
     events: new EventsHandler<DinovelEvents>(),
@@ -40,10 +37,21 @@ export async function startDinovelServer(
       title: opt.title,
       app,
       router,
-      scripts,
+      scripts: [],
+      style: '',
       get running() { return started; },
-      style,
     }
+  }
+
+  const scriptWatcher = new ScriptWatcher(opt.inject, core);
+  const sassWatcher = new SassWatcher(opt.style, core);
+  await scriptWatcher.start();
+  sassWatcher.start();
+
+  // Only run watcher once
+  if (config.mode !== 'dev') {
+    scriptWatcher.stop();
+    sassWatcher.stop();
   }
 
   logger.debug('Preloading plugins...');
@@ -57,7 +65,7 @@ export async function startDinovelServer(
 
   logger.debug('Starting server...');
   const awaiter = app.listen({
-    port: 8666,
+    port: config.port,
     signal: controler.signal,
   });
   started = true;
@@ -67,83 +75,17 @@ export async function startDinovelServer(
     await plugin.start?.call(plugin, core);
   }
 
-  logger.info('Server started at: http://localhost:8666');
+  setTimeout(() => {
+    core.events.emit('started');
+  }, 300);
+
+  logger.info(`Server started at: http://localhost:${config.port}`);
   await awaiter;
 
   for (const plugin of plugins) {
     await plugin.stop?.call(plugin, core);
   }
 
-}
-
-async function bundleScritps(paths: URL[]): Promise<ScriptSrc[]> {
-  const results: ScriptSrc[] = [];
-
-  const bundler = new ESBundler({
-    banner: '// INJECTED',
-    drop: [],
-    incremental: true,
-    keepNames: false,
-    logLevel: 'verbose',
-    logLimit: 15,
-    minify: false,
-    root: '',
-    treeShaking: true,
-    importMapURL: buildURL('./import_map.json'),
-  });
-
-  logger.debug('Compiling client scripts...');
-  for (const path of paths) {
-    const name = parse(path.pathname).name;
-    logger.debug(`Compiling ${name}...`);
-    const res = await bundler.bundle(path);
-
-    if (res.warnings.length) {
-      logger.warning(`Warnings for ${name}:`);
-      for (const warning of res.warnings) {
-        logger.warning('[ESLint]', warning);
-      }
-    }
-
-    if (res.errors.length) {
-      for (const error of res.errors) {
-        logger.error('[ESLint]', error);
-      }
-      throw new Error(`Error compiling ${name}`);
-    }
-
-    if (!res.outputFiles) {
-      throw new Error(`No output files for ${name}`);
-    }
-
-    const src = res.outputFiles[0].text;
-    results.push({ name, src });
-  }
-  logger.debug('Client scripts compiled.');
-
-  return results;
-}
-
-function bundleStyles(url: string): string {
-  logger.debug('Compiling styles...');
-  const bundler = new SassBundler({
-    quiet: false,
-    style: 'expanded',
-  });
-
-  const style = bundler.bundle(url).to_string();
-
-  if (!style) {
-    throw new Error(`No style for ${url}`);
-  }
-
-  if (typeof style === 'string') {
-    return style;
-  }
-
-  for (const p of style.entries()) {
-    return p[1];
-  }
-
-  throw new Error(`No style for ${url}`);
+  scriptWatcher.stop();
+  sassWatcher.stop();
 }

@@ -46,5 +46,6 @@ class ServerEventBridge implements EventBridge {
       sub.unsubscribe();
       this._sockets.delete(eventSocket);
     });
+    eventSocket.init();
   }
 }

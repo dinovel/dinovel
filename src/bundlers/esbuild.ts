@@ -5,6 +5,7 @@ import type { ESBundlerOptions } from './models.ts';
 export class ESBundler {
   #opt: ESBundlerOptions;
   #cwd: string;
+  #hasInit = false;
 
   public get options(): ESBundlerOptions {
     return this.#opt;
@@ -26,7 +27,10 @@ export class ESBundler {
       ? new URL(entry, this.#opt.root).href
       : entry.href;
 
-    await initialize({});
+    if (!this.#hasInit) {
+      await initialize({});
+      this.#hasInit = true;
+    }
 
     return await build({
       entryPoints: { entry: entryPath },

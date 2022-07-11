@@ -10,7 +10,6 @@ const DEFAULT_HOME_PAGE = /*html*/`
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" type="image/png" href="/assets/icon.png" />
     <title>${HTML_TOKEN_TITLE}</title>
     ${HTML_TOKEN_STYLE}
@@ -41,7 +40,7 @@ export class ServeHomePlugin implements Plugin {
       const path = `/${s.name}.js`;
       scriptsImports += /*html*/`<script src="${path}" ></script>\n`;
     }
-    const styleImport = /*html*/`<link rel="stylesheet" href="/style.css">\n`;
+    const styleImport = /*html*/`<link id="dn-style" rel="stylesheet" href="/style.css">\n`;
 
     const htmlResponse = this.#html
       .replace(HTML_TOKEN_TITLE, core.engine.title)

@@ -10,8 +10,6 @@ export class ClientEventsPlugin implements Plugin {
     core.events.registerBridge(bridge);
     bridge.init();
   }
-  start(_core: DinovelCore): void { }
-  stop(_core: DinovelCore): void { }
 }
 
 function createWebsocket() {

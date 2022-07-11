@@ -1,4 +1,5 @@
 import type { Application, Router } from 'oak';
+import type { Root } from 'react-dom/client'
 import type { EventsHandler } from "../std/events.ts";
 import type { DinovelEvents } from './events.ts';
 
@@ -20,6 +21,7 @@ export interface Server extends BaseEngine {
 
 export interface Client extends BaseEngine {
   readonly type: 'client';
+  readonly app: Root;
 }
 
 export interface BaseEngine {

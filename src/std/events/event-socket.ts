@@ -25,6 +25,7 @@ export class EventSocket {
 
   public send<T>(event: EventMessage<T>): void {
     if (!this._websocket || !this._ready) {
+      logger.debug('Websocket not ready, queuing event', event);
       this._pending.add(event);
       return;
     }
@@ -42,7 +43,6 @@ export class EventSocket {
 
   public init(): void {
     try {
-      logger.info('Connecting to events websocket...');
       this._ready = false;
 
       if (this._websocket instanceof WebSocket) {
@@ -50,7 +50,6 @@ export class EventSocket {
         this._websocket.onmessage = e => this.onMessage(e);
         this._websocket.onclose = e => this.onClose(e);
         this._ready = true;
-        logger.info('Websocket connected');
       }
     } catch (ex) {
       logger.error('Error connecting to websocket', ex);
@@ -58,7 +57,7 @@ export class EventSocket {
   }
 
   protected onClose(ev: CloseEvent): void {
-    logger.info('Websocket closed', ev.reason);
+    logger.debug('Websocket closed', ev.reason || '[no reason]');
     this._ready = false;
     this._websocket = undefined;
     this._close$.next();
@@ -74,7 +73,7 @@ export class EventSocket {
   }
 
   private onOpen() {
-    logger.info('Websocket opened');
+    logger.debug('Websocket opened');
     this._ready = true;
     for (const event of this._pending) {
       this.send(event);

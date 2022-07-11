@@ -40,11 +40,12 @@ function applyBrowserColor(color: COLOR, message: any[]): any[] {
 
   for (const m of message) {
     if (typeof m === 'string') {
-      res.push(...[`%c${m}`, c]);
+      res.push(`%c${m}`);
     } else {
       res.push(m);
     }
   }
+  res.push(c);
 
   return res;
 }

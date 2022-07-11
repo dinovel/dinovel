@@ -7,4 +7,7 @@ export interface DinovelEvents {
    * A message can be passed to the stop method to inform the user about the reason for stopping.
    */
   stop: string;
+
+  /** Called for script or styles reload */
+  reload: 'script' | 'style';
 }

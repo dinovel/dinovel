@@ -31,6 +31,8 @@ export class EventsHandler<T extends object> {
   }
 
   /** Subscribe to an event */
+  public on(event: '*'): Observable<EventMessage<unknown>>
+  public on<K extends Keys<T>>(event: K): Observable<T[K]>;
   public on<K extends Keys<T>>(event: K): Observable<T[K]> {
     return this.ensureSubject(event);
   }
