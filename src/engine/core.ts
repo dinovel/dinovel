@@ -6,16 +6,11 @@ import type { DinovelEvents } from './events.ts';
 export type Engine = Server | Client;
 export type EngineType = 'server' | 'client' | 'cross';
 
-export interface ScriptSrc {
-  src: string;
-  name: string;
-}
-
 export interface Server extends BaseEngine {
   readonly type: 'server';
   readonly app: Application;
   readonly router: Router;
-  scripts: ScriptSrc[];
+  scripts: Map<string, string>;
   style: string;
 }
 

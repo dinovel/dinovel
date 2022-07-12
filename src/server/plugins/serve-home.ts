@@ -35,9 +35,8 @@ export class ServeHomePlugin implements Plugin {
     const scripts = server.scripts;
 
     let scriptsImports = '';
-
-    for (const s of scripts) {
-      const path = `/${s.name}.js`;
+    for (const [name, _] of scripts.entries()) {
+      const path = `/${name}.js`;
       scriptsImports += /*html*/`<script src="${path}" ></script>\n`;
     }
     const styleImport = /*html*/`<link id="dn-style" rel="stylesheet" href="/style.css">\n`;

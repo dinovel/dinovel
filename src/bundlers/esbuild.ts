@@ -1,6 +1,9 @@
 import { denoPlugin } from "https://deno.land/x/esbuild_deno_loader@0.5.0/mod.ts";
 import { initialize, build, BuildResult } from "https://deno.land/x/esbuild@v0.14.48/mod.js";
+import { parse } from 'deno/path/mod.ts';
 import type { ESBundlerOptions } from './models.ts';
+
+export type { BuildResult, BuildFailure, OutputFile } from "https://deno.land/x/esbuild@v0.14.48/mod.js";
 
 export class ESBundler {
   #opt: ESBundlerOptions;
@@ -26,6 +29,7 @@ export class ESBundler {
     const entryPath = typeof entry === 'string'
       ? new URL(entry, this.#opt.root).href
       : entry.href;
+    const name = parse(entryPath).name;
 
     if (!this.#hasInit) {
       await initialize({});
@@ -33,7 +37,7 @@ export class ESBundler {
     }
 
     return await build({
-      entryPoints: { entry: entryPath },
+      entryPoints: { [name]: entryPath },
       bundle: true,
       format: "esm",
       metafile: true,

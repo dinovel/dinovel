@@ -1,28 +1,19 @@
 import { logger } from 'dinovel/std/logger.ts';
-import { ESBundler } from "dinovel/bundlers/esbuild.ts";
+import { ESBundler, BuildResult, BuildFailure, OutputFile } from "dinovel/bundlers/esbuild.ts";
 import { buildURL } from "dinovel/std/path.ts";
 import { parse } from 'deno/path/mod.ts';
 
-import type { DinovelCore, ScriptSrc, Server } from 'dinovel/engine/mod.ts';
-
-import { Watcher } from './watcher.ts';
+import type { DinovelCore, Server } from 'dinovel/engine/mod.ts';
 
 export class ScriptWatcher {
   #script: URL[];
-  #watcher: Watcher;
   #core: DinovelCore;
   #bundler: ESBundler;
+  #res = new Set<BuildResult>();
 
   public constructor(scripts: URL[], core: DinovelCore) {
     this.#script = scripts;
     this.#core = core;
-
-    const dirList = scripts.map(e => parse(e.pathname).dir);
-    this.#watcher = new Watcher({
-      extensions: ['js', 'ts', 'jsx', 'tsx'],
-      paths: dirList,
-      action: () => this.triggerBundler(),
-    });
 
     this.#bundler = new ESBundler({
       banner: '// INJECT',
@@ -35,60 +26,75 @@ export class ScriptWatcher {
       root: '',
       treeShaking: true,
       importMapURL: buildURL('./import_map.json'),
+      watch: {
+        onRebuild: (err, res) => {
+          if (err) {
+            this.onError(err, res?.outputFiles);
+          } else if (res) {
+            this.onSuccess(res);
+          }
+        }
+      }
     });
   }
 
   public async start() {
     await this.bundle();
-    this.#watcher.start();
   }
 
   public stop() {
-    this.#watcher.stop();
-  }
-
-  private async triggerBundler() {
-    logger.info('Changes detected, compiling scripts...');
-    try {
-      await this.bundle();
-      this.#core.events.emit('reload', 'script');
-      logger.info('Compilation finished. Reloading...');
-    } catch (err) {
-      logger.error('Error compiling scripts:', err);
-    }
+    this.#res.forEach(r => r.stop?.call(r));
   }
 
   private async bundle() {
-    const results: ScriptSrc[] = [];
-
     for (const path of this.#script) {
-      const name = parse(path.pathname).name;
-      logger.debug(`Compiling ${name}...`);
       const res = await this.#bundler.bundle(path);
-
-      if (res.warnings.length) {
-        logger.warning(`Warnings for ${name}:`);
-        for (const warning of res.warnings) {
-          logger.warning('[ESBundle]', warning);
-        }
-      }
-
-      if (res.errors.length) {
-        for (const error of res.errors) {
-          logger.error('[ESBundle]', error);
-        }
-        throw new Error(`Error compiling ${name}`);
-      }
-
-      if (!res.outputFiles) {
-        throw new Error(`No output files for ${name}`);
-      }
-
-      const src = res.outputFiles[0].text;
-      results.push({ name, src });
+      this.onSuccess(res, false);
     }
 
-    (this.#core.engine as Server).scripts = results;
     logger.debug('Scripts compiled.');
+  }
+
+  private onError(res: BuildFailure, out: OutputFile[] | undefined): void {
+    const file = (out && out[0]) ?? undefined;
+
+    if (file) {
+      logger.error(`Error compiling ${file.path}`);
+    }
+
+    if (res.warnings.length) {
+      for (const warning of res.warnings) {
+        logger.warning('[ESBundle]', warning);
+      }
+    }
+
+    if (res.errors.length) {
+      for (const error of res.errors) {
+        logger.error('[ESBundle]', error);
+      }
+      return;
+    }
+  }
+
+  private onSuccess(res: BuildResult, reload = true): void {
+    const file = res.outputFiles![0];
+    const name = parse(file.path).name;
+    logger.debug(`Compiled ${name}`);
+
+    if (res.warnings.length) {
+      for (const warning of res.warnings) {
+        logger.warning('[ESBundle]', warning);
+      }
+    }
+
+    if (res.errors.length) {
+      for (const error of res.errors) {
+        logger.error('[ESBundle]', error);
+      }
+      return;
+    }
+
+    (this.#core.engine as Server).scripts.set(name, file.text);
+    if (reload) { this.#core.events.emit('reload', 'script'); }
   }
 }

@@ -36,18 +36,11 @@ function applyBrowserColor(color: COLOR, message: any[]): any[] {
   if (toIgnore.includes(color)) { return message; }
 
   const c = BROWSER_COLOR[color];
-  const res: any[] = [];
-
-  for (const m of message) {
-    if (typeof m === 'string') {
-      res.push(`%c${m}`);
-    } else {
-      res.push(m);
-    }
-  }
-  res.push(c);
-
-  return res;
+  return [
+    `%c${message[0] ?? ''}`,
+    c,
+    ...message.slice(1),
+  ];
 }
 
 const BROWSER_COLOR: { [key in COLOR]: string } = {

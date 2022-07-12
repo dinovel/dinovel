@@ -37,7 +37,7 @@ export async function startDinovelServer(
       title: opt.title,
       app,
       router,
-      scripts: [],
+      scripts: new Map(),
       style: '',
       get running() { return started; },
     }

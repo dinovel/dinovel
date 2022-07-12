@@ -7,9 +7,9 @@ export class ServeScriptsPlugin implements Plugin {
     const server = core.engine as Server;
     const scripts = server.scripts;
 
-    for (const s of scripts) {
-      server.router.get(`/${s.name}.js`, ctx => {
-        ctx.response.body = s.src;
+    for (const [name, body] of scripts.entries()) {
+      server.router.get(`/${name}.js`, ctx => {
+        ctx.response.body = body;
         ctx.response.headers.set('Content-Type', 'application/javascript');
       });
     }
