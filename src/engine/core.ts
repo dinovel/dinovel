@@ -10,8 +10,8 @@ export interface Server extends BaseEngine {
   readonly type: 'server';
   readonly app: Application;
   readonly router: Router;
-  scripts: Map<string, string>;
-  style: string;
+  readonly styles: ServerStyles;
+  readonly scripts: Map<string, string>;
 }
 
 export interface Client extends BaseEngine {
@@ -28,4 +28,10 @@ export interface BaseEngine {
 export interface DinovelCore {
   readonly engine: Engine;
   readonly events: EventsHandler<DinovelEvents>;
+}
+
+export interface ServerStyles {
+  user: string;
+  dinovel: string;
+  useDinovel: boolean;
 }

@@ -10,7 +10,7 @@ const DEFAULT_HOME_PAGE = /*html*/`
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="/assets/icon.png" />
+    <link rel="icon" type="image/png" href="/assets/logo.png" />
     <title>${HTML_TOKEN_TITLE}</title>
     ${HTML_TOKEN_STYLE}
   </head>
@@ -39,7 +39,9 @@ export class ServeHomePlugin implements Plugin {
       const path = `/${name}.js`;
       scriptsImports += /*html*/`<script src="${path}" ></script>\n`;
     }
-    const styleImport = /*html*/`<link id="dn-style" rel="stylesheet" href="/style.css">\n`;
+    let styleImport = /*html*/`<link class="dn-style" rel="stylesheet" href="/style.css">\n`;
+    if (server.styles.useDinovel)
+      styleImport += /*html*/`<link class="dn-style" rel="stylesheet" href="/dinovel.css">\n`;
 
     const htmlResponse = this.#html
       .replace(HTML_TOKEN_TITLE, core.engine.title)

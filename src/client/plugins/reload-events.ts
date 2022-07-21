@@ -7,13 +7,18 @@ export class ReloadEventsPlugin implements Plugin {
       if (k === 'script') {
         window.location.reload();
       } else {
-        const elem = document.getElementById('dn-style') as HTMLLinkElement;
-        const random = Math.random();
-        elem.href = `/style.css?${random}`;
+        const elems = document.querySelectorAll('.dn-style');
+        elems.forEach(e => reloadPath(e as HTMLLinkElement));
       }
     });
     core.events.on('started').subscribe(() => {
       window.location.reload()
     });
   }
+}
+
+function reloadPath(elem: HTMLLinkElement): void {
+  const random = Math.random();
+  const refValue = elem.href.split('?')[0];
+  elem.href = `${refValue}?${random}`;
 }

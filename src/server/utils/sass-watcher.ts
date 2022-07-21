@@ -11,10 +11,12 @@ export class SassWatcher {
   #path: string;
   #watcher: Watcher;
   #core: DinovelCore;
+  #kind: 'user' | 'dinovel';
 
-  public constructor(path: string, core: DinovelCore) {
+  public constructor(path: string, core: DinovelCore, kind: 'user' | 'dinovel' = 'user') {
     this.#path = path;
     this.#core = core;
+    this.#kind = kind;
 
     const fullPath = buildURL(path);
     const dir = parse(fullPath.pathname).dir;
@@ -60,10 +62,10 @@ export class SassWatcher {
     }
 
     if (typeof style === 'string') {
-      (this.#core.engine as Server).style = style;
+      (this.#core.engine as Server).styles[this.#kind] = style;
     } else if (style instanceof Map) {
       for (const p of style.entries()) {
-        (this.#core.engine as Server).style = p[1];
+        (this.#core.engine as Server).styles[this.#kind] = p[1];
       }
     } else {
       throw new Error(`No style for ${this.#path}`);

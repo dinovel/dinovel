@@ -1,6 +1,6 @@
 import { Application, Router } from 'oak';
-import type { InitServerOptions } from './server-options.ts';
-import { Plugin, DinovelCore, initHandler, DinovelEvents } from 'dinovel/engine/mod.ts';
+import type { InitServerOptions, UserStyle } from './server-options.ts';
+import { Plugin, DinovelCore, initHandler, DinovelEvents, ServerStyles } from 'dinovel/engine/mod.ts';
 import { EventsHandler } from "dinovel/std/events.ts";
 import { logger } from 'dinovel/std/logger.ts';
 
@@ -38,20 +38,23 @@ export async function startDinovelServer(
       app,
       router,
       scripts: new Map(),
-      style: '',
+      styles: initStyles(opt.style),
       get running() { return started; },
     }
   }
 
   const scriptWatcher = new ScriptWatcher(opt.inject, core);
-  const sassWatcher = new SassWatcher(opt.style, core);
+  const sassWatcher = new SassWatcher(getStylePath(opt), core);
+  const dinovelWatcher = new SassWatcher('../dinovel/styles/main.scss', core, 'dinovel');
   await scriptWatcher.start();
   sassWatcher.start();
+  dinovelWatcher.start();
 
   // Only run watcher once
   if (config.mode !== 'dev') {
     scriptWatcher.stop();
     sassWatcher.stop();
+    dinovelWatcher.stop();
   }
 
   logger.debug('Preloading plugins...');
@@ -88,4 +91,18 @@ export async function startDinovelServer(
 
   scriptWatcher.stop();
   sassWatcher.stop();
+  dinovelWatcher.stop();
+}
+
+export function initStyles(opt: string | UserStyle): ServerStyles {
+  const useDinovel = (typeof opt === 'string' ? true : opt.useDinovel) ?? true;
+  return {
+    dinovel: '',
+    user: '',
+    useDinovel
+  }
+}
+
+export function getStylePath(opt: InitServerOptions): string {
+  return typeof opt.style === 'string' ? opt.style : opt.style.path;
 }

@@ -4,7 +4,7 @@ import { DinovelCore, initHandler, DinovelEvents, Plugin } from 'dinovel/engine/
 import { EventsHandler } from "dinovel/std/events.ts";
 
 import { ClientOptions } from "./client-options.ts";
-import { MainMenu } from './widgets/main-menu.tsx';
+import { MainMenu } from 'dinovel/widgets/views/main-menu.tsx';
 import { getPlugins } from "./plugins/__.ts";
 
 /**
@@ -43,7 +43,7 @@ export async function startDinovel(
     await plugin.inject?.call(plugin, core);
   }
 
-  appRoot.render(opt.root ?? <MainMenu />);
+  appRoot.render(opt.root ?? <MainMenu title={opt.title} />);
 
   for (const plugin of plugins) {
     await plugin.start?.call(plugin, core);
