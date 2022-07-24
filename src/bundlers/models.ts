@@ -11,7 +11,7 @@ export interface ESBundlerOptions {
   logLevel: LogLevel;
   logLimit: number;
 
-  watch?: WatchMode;
+  watch?: WatchMode | boolean;
   importMapURL?: URL;
   define?: { [key: string]: string };
   sourceRoot?: string;

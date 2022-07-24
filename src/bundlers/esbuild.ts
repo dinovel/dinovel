@@ -9,6 +9,7 @@ export class ESBundler {
   #opt: ESBundlerOptions;
   #cwd: string;
   #hasInit = false;
+  #builders = new Set<BuildResult>();
 
   public get options(): ESBundlerOptions {
     return this.#opt;
@@ -18,9 +19,17 @@ export class ESBundler {
     return this.#cwd;
   }
 
-  constructor(options: ESBundlerOptions) {
+  constructor(options: ESBundlerOptions, hasInit = false) {
     this.#opt = options;
     this.#cwd = Deno.cwd();
+    this.#hasInit = hasInit;
+  }
+
+  public stop(): void {
+    for (const b of this.#builders) {
+      b?.rebuild?.dispose();
+      b.stop?.call(b);
+    }
   }
 
   public async bundle(entry: string): Promise<BuildResult>
@@ -36,7 +45,7 @@ export class ESBundler {
       this.#hasInit = true;
     }
 
-    return await build({
+    const result = await build({
       entryPoints: { [name]: entryPath },
       bundle: true,
       format: "esm",
@@ -66,5 +75,8 @@ export class ESBundler {
       sourcemap: this.#opt.sourceMap,
       watch: this.#opt.watch,
     });
+
+    this.#builders.add(result);
+    return result;
   }
 }
