@@ -85,6 +85,7 @@ export class EventSocket {
 export class PersistentEventSocket extends EventSocket {
   private readonly _timeout;
   private readonly _create: () => WebSocket;
+  #onReconnect?: () => void;
 
   constructor(create: () => WebSocket, timeout = 1000) {
     super();
@@ -92,15 +93,23 @@ export class PersistentEventSocket extends EventSocket {
     this._timeout = timeout;
   }
 
-  public override init(): void {
+  public override init(reconnect = false): void {
     this._websocket = this._create();
     super.init();
-    if (!this._ready) { setTimeout(() => this.init(), this._timeout); }
+    if (!this._ready) {
+      setTimeout(() => this.init(reconnect), this._timeout);
+    } else if (reconnect && this.#onReconnect) {
+      this.#onReconnect();
+    }
+  }
+
+  public onReconnect(callback: () => void | Promise<void>): void {
+    this.#onReconnect = callback;
   }
 
   protected override onClose(ev: CloseEvent): void {
     super.onClose(ev);
-    setTimeout(() => this.init(), this._timeout);
+    setTimeout(() => this.init(true), this._timeout);
   }
 
 }

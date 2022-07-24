@@ -36,8 +36,8 @@ export class ServeHomePlugin implements Plugin {
 
     let scriptsImports = '';
     for (const [name, _] of scripts.entries()) {
-      const path = `/${name}.js`;
-      scriptsImports += /*html*/`<script src="${path}" ></script>\n`;
+      const path = `/${name}.mjs`;
+      scriptsImports += /*html*/`<script type="module" src="${path}" ></script>\n`;
     }
     let styleImport = /*html*/`<link class="dn-style" rel="stylesheet" href="/style.css">\n`;
     if (server.styles.useDinovel)

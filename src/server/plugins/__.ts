@@ -1,6 +1,8 @@
 import { Plugin } from 'dinovel/engine/mod.ts';
 import { logger } from 'dinovel/std/logger.ts';
 
+import { ServeAssetsByIdPlugin } from 'dinovel/modules/assets-module/plugin.ts';
+
 import { ServeAssetsPlugin } from './serve-assets.ts';
 import { ServeStylePlugin } from './serve-style.ts';
 import { ServerEventsPlugin } from './server-events.ts';
@@ -17,6 +19,7 @@ export function getPlugins(useDefaults: boolean, userPlugins: Plugin[]): Plugin[
     new ServeScriptsPlugin(),
     new ServeAssetsPlugin(),
     new EventLoggerPlugin(),
+    new ServeAssetsByIdPlugin(),
     ...userPlugins
   ] : userPlugins;
 
@@ -24,7 +27,7 @@ export function getPlugins(useDefaults: boolean, userPlugins: Plugin[]): Plugin[
 
   for (const p of plugins) {
     if (unique.has(p.name)) {
-      logger.warning(`Plugin ${p.name} will be overridden!`);
+      logger.warning(`Plugin ${p.name} was overridden by user plugin.`);
     }
 
     unique.set(p.name, p);

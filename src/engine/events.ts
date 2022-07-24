@@ -10,4 +10,10 @@ export interface DinovelEvents {
 
   /** Called for script or styles reload */
   reload: 'script' | 'style';
+
+  /** Server connection was completed */
+  reconnect: void;
+
+  /** Server connection closed */
+  connectionLost: void;
 }

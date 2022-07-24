@@ -21,7 +21,6 @@ export async function startDinovelServer(
   userPlugins: Plugin[] = [],
   defaults = true
 ): Promise<void> {
-
   const plugins = getPlugins(defaults, userPlugins);
   const app = new Application();
   const router = new Router();
@@ -59,6 +58,7 @@ export async function startDinovelServer(
 
   logger.debug('Preloading plugins...');
   for (const plugin of plugins) {
+    logger.debug(`Loading plugin: ${plugin.name}`);
     await plugin.inject?.call(plugin, core);
   }
 
