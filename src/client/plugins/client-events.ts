@@ -1,5 +1,5 @@
 import type { Plugin, EngineType, DinovelCore } from 'dinovel/engine/mod.ts';
-import type { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { EventBridge, EventMessage, PersistentEventSocket, EVENTS_ENDPOINT } from 'dinovel/std/events.ts';
 
 export class ClientEventsPlugin implements Plugin {
@@ -8,6 +8,7 @@ export class ClientEventsPlugin implements Plugin {
   inject(core: DinovelCore): void {
     const bridge = new ClientEventBridge();
     core.events.registerBridge(bridge);
+    bridge.onReconnect.subscribe(() => core.events.emit('reconnect'));
     bridge.init();
   }
 }
@@ -20,9 +21,11 @@ function createWebsocket() {
 
 class ClientEventBridge implements EventBridge {
   private readonly _websocket: PersistentEventSocket;
+  private readonly _reconnect = new Subject<void>();
 
   constructor() {
     this._websocket = new PersistentEventSocket(createWebsocket);
+    this._websocket.onReconnect(() => this._reconnect.next());
   }
 
   public type = 'websocket-client';
@@ -35,7 +38,11 @@ class ClientEventBridge implements EventBridge {
     return this._websocket.on;
   }
 
+  public get onReconnect(): Observable<void> {
+    return this._reconnect;
+  }
+
   public init(): void {
-    this._websocket.init();
+    this._websocket.init(true);
   }
 }

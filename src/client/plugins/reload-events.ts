@@ -14,6 +14,9 @@ export class ReloadEventsPlugin implements Plugin {
     core.events.on('started').subscribe(() => {
       window.location.reload()
     });
+    core.events.on('reconnect').subscribe(() => {
+      window.location.reload()
+    });
   }
 }
 
