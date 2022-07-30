@@ -1,11 +1,11 @@
 import { logger } from 'dinovel/std/logger.ts';
-import { ESBundler, BuildResult } from "dinovel/bundlers/esbuild.ts";
+import { ESBundler, BuildResult, BuildFailure } from "dinovel/bundlers/esbuild.ts";
 import { buildURL } from "dinovel/std/path.ts";
 import { parse } from 'deno/path/mod.ts';
 
 import type { DinovelCore, Server } from 'dinovel/engine/mod.ts';
 
-export class ScriptWatcher {
+export class ESBuildScriptWatcher {
   #script: URL[];
   #core: DinovelCore;
   #bundler: ESBundler;
@@ -14,7 +14,15 @@ export class ScriptWatcher {
   public constructor(scripts: URL[], core: DinovelCore) {
     this.#script = scripts;
     this.#core = core;
-    this.#bundler = this.buildBundler();
+    this.#bundler = this.buildBundler((err, res) => {
+      if (err) {
+        logger.error(`[ESBuild] error: ${err.name}`);
+        logger.error(`[ESBuild] error: ${err.message}`);
+        return;
+      }
+
+      if (res) { this.onSuccess(res); }
+    });
   }
 
   public async start() {
@@ -56,11 +64,11 @@ export class ScriptWatcher {
     if (reload) { this.#core.events.emit('reload', 'script'); }
   }
 
-  private buildBundler(hasInit = false): ESBundler {
+  private buildBundler(watch?: (error: BuildFailure | null, result: BuildResult | null) => void, hasInit = false): ESBundler {
     return new ESBundler({
       banner: '// INJECTED for Dinovel',
       drop: [],
-      incremental: false,
+      incremental: true,
       keepNames: false,
       logLevel: 'warning',
       logLimit: 15,
@@ -68,7 +76,7 @@ export class ScriptWatcher {
       root: '',
       treeShaking: true,
       importMapURL: buildURL('./import_map.json'),
-      watch: false
+      watch: watch ? { onRebuild: watch } : undefined,
     }, hasInit);
   }
 }

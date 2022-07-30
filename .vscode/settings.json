@@ -8,5 +8,14 @@
       "local": {
         "REST_CLIENT_URL": "http://localhost:8666"
       },
-    }
+    },
+    "workbench.colorCustomizations": {
+      "sash.hoverBorder": "#ff72a2",
+      "statusBar.background": "#ff3f81",
+      "statusBar.foreground": "#e7e7e7",
+      "statusBarItem.hoverBackground": "#ff72a2",
+      "statusBarItem.remoteBackground": "#ff3f81",
+      "statusBarItem.remoteForeground": "#e7e7e7"
+    },
+    "peacock.color": "#FF3F81"
 }

@@ -4,7 +4,7 @@ import { Plugin, DinovelCore, initHandler, DinovelEvents, ServerStyles } from 'd
 import { EventsHandler } from "dinovel/std/events.ts";
 import { logger } from 'dinovel/std/logger.ts';
 
-import { ScriptWatcher } from './utils/script-watcher.ts';
+import { ESBuildScriptWatcher } from './utils/esbuild-watcher.ts';
 import { getPlugins } from './plugins/__.ts';
 import { SassWatcher } from "./utils/sass-watcher.ts";
 import { readEnv } from './utils/env-reader.ts';
@@ -42,7 +42,7 @@ export async function startDinovelServer(
     }
   }
 
-  const scriptWatcher = new ScriptWatcher(opt.inject, core);
+  const scriptWatcher = new ESBuildScriptWatcher(opt.inject, core);
   const sassWatcher = new SassWatcher(getStylePath(opt), core);
   const dinovelWatcher = new SassWatcher('../dinovel/styles/main.scss', core, 'dinovel');
   await scriptWatcher.start();
