@@ -2,9 +2,11 @@ import ReactDOM from 'react-dom/client';
 import React from 'react';
 import { DinovelCore, initHandler, DinovelEvents, Plugin } from 'dinovel/engine/mod.ts';
 import { EventsHandler } from "dinovel/std/events.ts";
+import { Store } from 'dinovel/std/state.ts';
+import { Unit } from 'dinovel/std/helpers.ts';
+import { MainMenu } from 'dinovel/widgets/views/main-menu.tsx';
 
 import { ClientOptions } from "./client-options.ts";
-import { MainMenu } from 'dinovel/widgets/views/main-menu.tsx';
 import { getPlugins } from "./plugins/__.ts";
 
 /**
@@ -34,6 +36,7 @@ export async function startDinovel(
       title: opt.title,
       version: '0.0.0',
       app: appRoot,
+      store: new Store<Unit>({}),
     }
   }
   initHandler.init(core);

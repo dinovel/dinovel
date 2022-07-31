@@ -45,22 +45,27 @@ export class Store<T extends StoreState> {
   }
 
   /**
-   * Creates a new Store with new modules
+   * Add new modules to the store
    *
    * @param modules Modules to merge to the store
    * @param override If true, existing modules will be overridden
    * @returns
    */
   public merge<K extends StoreState>(modules: StoreModules<K>, override = false): Store<T & K> {
-    const mods = override
-      ? { ...this.#modules, ...modules, }
-      : { ...modules, ...this.#modules, };
-
-    const store = new Store(mods as unknown as StoreModules<T & K>);
-    for (const plugin of this.#plugins.values()) {
-      store.addPlugin(plugin as unknown as StorePlugin<T & K>);
+    for (const modKey of Object.keys(modules)) {
+      const key = modKey as keyof T;
+      if (this.#modules[key] && !override) {
+        logger.error(`Merge Error: Module ${key.toString()} already exists`);
+        continue;
+      }
+      // deno-lint-ignore no-explicit-any
+      this.#modules[key] = modules[modKey] as any;
     }
-    return store;
+    return this.alias<K>();
+  }
+
+  public alias<K extends StoreState>(): Store<T & K> {
+    return this as unknown as Store<T & K>;
   }
 
   /**
