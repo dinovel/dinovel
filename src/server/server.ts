@@ -2,7 +2,9 @@ import { Application, Router } from 'oak';
 import type { InitServerOptions, UserStyle } from './server-options.ts';
 import { Plugin, DinovelCore, initHandler, DinovelEvents, ServerStyles } from 'dinovel/engine/mod.ts';
 import { EventsHandler } from "dinovel/std/events.ts";
+import { Store } from 'dinovel/std/state.ts';
 import { logger } from 'dinovel/std/logger.ts';
+import { Unit } from "dinovel/std/helpers.ts";
 
 import { ESBuildScriptWatcher } from './utils/esbuild-watcher.ts';
 import { getPlugins } from './plugins/__.ts';
@@ -30,6 +32,7 @@ export async function startDinovelServer(
 
   const core: DinovelCore = {
     events: new EventsHandler<DinovelEvents>(),
+    store: new Store<Unit>({}),
     engine: {
       type: 'server',
       version: '0.0.0',

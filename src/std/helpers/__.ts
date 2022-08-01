@@ -1,3 +1,4 @@
+export * from './arrays.ts';
 export * from './globals.ts';
 export * from './guards.ts';
 export * from './object.ts';

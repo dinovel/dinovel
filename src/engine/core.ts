@@ -18,7 +18,6 @@ export interface Server extends BaseEngine {
 
 export interface Client extends BaseEngine {
   readonly type: 'client';
-  readonly store: Store<Unit>
   readonly app: Root;
 }
 
@@ -31,6 +30,7 @@ export interface BaseEngine {
 export interface DinovelCore {
   readonly engine: Engine;
   readonly events: EventsHandler<DinovelEvents>;
+  readonly store: Store<Unit>
 }
 
 export interface ServerStyles {

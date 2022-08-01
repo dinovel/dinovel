@@ -6,6 +6,8 @@ import { ReloadEventsPlugin } from './reload-events.ts';
 
 import { EventLoggerPlugin } from 'dinovel/engine/plugins/event-logger.ts';
 import { EntityStorePlugin } from 'dinovel/modules/entity-module/plugin.ts';
+import { RenderStorePlugin } from 'dinovel/modules/render-module/plugin.ts';
+import { TempStorePlugin } from 'dinovel/modules/temp-store/plugin.ts';
 
 export function getPlugins(useDefaults: boolean, userPlugins: Plugin[]): Plugin[] {
   const plugins = useDefaults ? [
@@ -13,6 +15,8 @@ export function getPlugins(useDefaults: boolean, userPlugins: Plugin[]): Plugin[
     new ReloadEventsPlugin(),
     new EventLoggerPlugin(),
     new EntityStorePlugin(),
+    new RenderStorePlugin(),
+    new TempStorePlugin(),
     ...userPlugins
   ] : userPlugins;
 

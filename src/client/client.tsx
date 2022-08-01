@@ -30,22 +30,22 @@ export async function startDinovel(
 
   const core: DinovelCore = {
     events: new EventsHandler<DinovelEvents>(),
+    store: new Store<Unit>({}),
     engine: {
       type: 'client',
       running: true,
       title: opt.title,
       version: '0.0.0',
       app: appRoot,
-      store: new Store<Unit>({}),
     }
   }
-  initHandler.init(core);
 
 
   for (const plugin of plugins) {
     await plugin.inject?.call(plugin, core);
   }
 
+  initHandler.init(core);
   appRoot.render(opt.root ?? <MainMenu title={opt.title} />);
 
   for (const plugin of plugins) {
