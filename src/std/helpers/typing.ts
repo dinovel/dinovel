@@ -8,7 +8,9 @@ export type Keys<T> = Extract<keyof T, string>;
 export interface JSONObject extends Record<string, JSONValue> {}
 /** List of store values */
 export interface JSONArray extends Array<JSONValue> {}
+/** Index value */
+export interface JSONIndex { [key: string]: JSONValue; }
 /** Possible types, for a store */
-export type JSONValue = string | number | boolean | null | undefined | JSONObject | JSONArray;
+export type JSONValue = string | number | boolean | null | undefined | JSONObject | JSONIndex | JSONArray;
 /** Empty object, utility type */
 export type Unit = {};

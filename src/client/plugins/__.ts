@@ -5,12 +5,14 @@ import { ClientEventsPlugin } from './client-events.ts';
 import { ReloadEventsPlugin } from './reload-events.ts';
 
 import { EventLoggerPlugin } from 'dinovel/engine/plugins/event-logger.ts';
+import { EntityStorePlugin } from 'dinovel/modules/entity-module/plugin.ts';
 
 export function getPlugins(useDefaults: boolean, userPlugins: Plugin[]): Plugin[] {
   const plugins = useDefaults ? [
     new ClientEventsPlugin(),
     new ReloadEventsPlugin(),
     new EventLoggerPlugin(),
+    new EntityStorePlugin(),
     ...userPlugins
   ] : userPlugins;
 
