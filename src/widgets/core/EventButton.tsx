@@ -4,7 +4,7 @@ export type EventButtonProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement
 
 export const EventButton = (props: EventButtonProps) => {
     return (
-        <button {...props} onClick={} >
+        <button {...props} >
             {props.children}
         </button>
     );
