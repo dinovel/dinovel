@@ -1,4 +1,15 @@
-* Architecture
-
-  * [Server](arch/server/README.md)
-  * [Engine](arch/engine/README.md)
+* [Dinovel](/)
+* [Development](/dev.md)
+* [Engine](/engine/)
+  * [Initialization](/engine/init.md)
+  * [Plugins](/engine/plugins.md)
+  * [Events](/engine/events.md)
+  * [Logger](/engine/logger.md)
+  * [State](/engine/state.md)
+  * [FileSystem](/engine/filesystem.md)
+* Modules
+  * [Assets](/modules/assets.md)
+  * [Entities](/modules/entities.md)
+  * [Render](/modules/render/)
+* [Widgets](/widgets/)
+* [Distribute](/dist.md)

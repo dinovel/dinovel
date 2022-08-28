@@ -4,4 +4,4 @@
 
 > Visual novel framework
 
-![color](#f7b2ff)
+![color](#23153C)

@@ -2,11 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Document</title>
+  <title>Dinovel</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <meta name="description" content="Description">
+  <meta name="description" content="Visual novel framework">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <link rel="icon" type="image/png" href="/_media/favicon.png">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify/lib/themes/dark.css" />
+  <style>
+    :root {
+      --theme-color: #FF3F81;
+      --theme-back: #23153C;
+      --root-back: #3f3f3f;
+    }
+
+    .sidebar, body {
+      background-color: var(--root-back);
+    }
+
+    .app-nav li ul {
+      background-color: var(--root-back);
+      border: 1px solid;
+        border-top-color: currentcolor;
+        border-right-color: currentcolor;
+        border-bottom-color: currentcolor;
+        border-left-color: currentcolor;
+      border-color: #ddd #ddd #ccc;
+    }
+  </style>
 </head>
 <body>
   <div id="app"></div>

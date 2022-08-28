@@ -1,0 +1,26 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+    {
+      "type": "shell",
+      "command": "docsify",
+      "group": "none",
+      "label": "Serve docs",
+      "args": [
+        "serve",
+        "./docs"
+      ],
+      "isBackground": true,
+      "presentation": {
+        "echo": false,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "promptOnClose": false,
+      "problemMatcher": []
+    }
+  ]
+}
