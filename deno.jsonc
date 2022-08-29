@@ -15,5 +15,11 @@
       "singleQuote": true,
       "useTabs": false
     }
+  },
+  "importMap": "import_map.json",
+  "test": {
+    "files": {
+      "include": ["tests/"]
+    }
   }
 }
