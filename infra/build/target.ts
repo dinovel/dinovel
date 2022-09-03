@@ -25,3 +25,5 @@ export interface BuildWatcher {
 export type BuildTargets = Record<string, BuildTarget>;
 
 export type BuildWatchers = Record<string, BuildWatcher>;
+
+export type BuildResults = Record<string, BuildResult>;
