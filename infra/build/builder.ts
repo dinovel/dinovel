@@ -1,3 +1,4 @@
+import type { LoggerService } from 'dinovel/std/logger.ts';
 import { BuildTargets, BuildWatchers, BuildTarget, BuildResult, TargetType, BuildResults } from "./target.ts";
 import { ICompiler } from './compiler.ts';
 import { IListner, IReporter } from "./reporter.ts";
@@ -13,10 +14,20 @@ export class DinovelBuilder {
   #running = false;
 
   constructor(
-    reporter: IReporter,
+    logger: LoggerService,
     stylesCompiler?: ICompiler,
     scriptCompiler?: ICompiler,
   ) {
+
+    const reporter: IReporter = {
+      stderr(src: string, message: string) {
+        logger.error(message, src);
+      },
+      stdout(src: string, message: string) {
+        logger.info(message, src);
+      },
+    };
+
     this.#compiler = {
       style: stylesCompiler ?? new SassCompiler(reporter),
       script: scriptCompiler ?? new EsbuildCompiler(reporter),
