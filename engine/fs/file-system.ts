@@ -1,7 +1,7 @@
 import { FolderType } from './folders.ts';
 
 /** FileSystem to be used by engine */
-export interface FileSystem {
+export interface IFileSystem {
   /** Implementation type */
   type: string;
   /**

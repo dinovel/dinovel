@@ -16,3 +16,4 @@ initHandler.onInit.subscribe(dinovel => {
 export * from './core.ts';
 export * from './events.ts';
 export * from './plugin.ts';
+export * from './runtime.ts';
