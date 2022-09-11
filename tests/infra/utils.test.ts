@@ -1,11 +1,15 @@
 import { assertEquals } from "deno/testing/asserts.ts";
 import { getRelativeUrl } from '../../infra/utils.ts';
 
-Deno.test('getRelativeUrl', () => {
-  const sourceUrl = new URL('file:///home/user/src/file.ts');
-  const rootDir = 'file:///home/user/src';
+Deno.test('#infra/utils', async t => {
 
-  const relativeUrl = getRelativeUrl(sourceUrl, rootDir);
+  await t.step('getRelativeUrl', () => {
+    const sourceUrl = new URL('file:///home/user/src/file.ts');
+    const rootDir = 'file:///home/user/src';
 
-  assertEquals(relativeUrl, './file.ts');
+    const relativeUrl = getRelativeUrl(sourceUrl, rootDir);
+
+    assertEquals(relativeUrl, './file.ts');
+  });
+
 });

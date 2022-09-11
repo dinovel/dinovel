@@ -6,7 +6,7 @@ import { registerAssets } from './assets.ts';
 import { Application, Router } from "oak";
 import { LoggerService } from "dinovel/std/logger.ts";
 
-export function RunServer(options: ServerOptions): LiveServer {
+export function runServer(options: ServerOptions): LiveServer {
   const { port = 8666, targets, assetsFolder = 'assets' } = options;
 
   const logger = new LoggerService();

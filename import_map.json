@@ -1,11 +1,12 @@
 {
   "imports": {
+    "dinovel/std/": "./std/",
     "dinovel/": "./src/",
-    "deno/": "https://deno.land/std@0.144.0/",
-    "oak": "https://deno.land/x/oak@v9.0.1/mod.ts",
+    "deno/": "https://deno.land/std@0.155.0/",
+    "oak": "https://deno.land/x/oak@v11.1.0/mod.ts",
     "react": "https://esm.sh/react@18.2.0",
     "react-dom": "https://esm.sh/react-dom@18.2.0",
     "react-dom/": "https://esm.sh/react-dom@18.2.0/",
-    "rxjs": "https://esm.sh/rxjs@7.5.5"
+    "rxjs": "https://esm.sh/rxjs@7.5.6"
   }
 }
