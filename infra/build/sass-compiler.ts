@@ -25,7 +25,7 @@ export class SassCompiler implements ICompiler {
     const output = this.#compile(file, optimize);
 
     if (watch) {
-      const dir = parse(file.href).dir;
+      const dir = parse(getRelativeUrl(file, Deno.cwd())).dir;
       const subject = new Subject<BuildResult>();
       const watcher = new Watcher({
         action: () => {
@@ -56,7 +56,8 @@ export class SassCompiler implements ICompiler {
     const style = this.#sassParser([path], {
       quiet: true,
       style: optimize ? 'compressed' : 'expanded',
-    });
+      load_paths: [],
+    }).to_string();
 
     if (typeof style === 'string') {
       this.#report.stdout('SASS', `compiling ${path} completed!`);

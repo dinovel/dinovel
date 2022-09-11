@@ -5,7 +5,7 @@ type ArrayKeys = keyof Pick<TemplateOptions, 'head' | 'body'>;
 
 function build(target: ArrayKeys ,values: string[]): ITransformer {
   return (options) => {
-    options[target] = [...options.head ?? [], ...values];
+    options[target] = [...(options[target] ?? []), ...values];
     return options;
   };
 }
@@ -17,3 +17,4 @@ export const defaultHeader = () => build('head', [
   '<meta charset="utf-8">',
   '<meta name="viewport" content="width=device-width, initial-scale=1">',
 ]);
+export const root = (id = 'app') => build('body', [`<div id="${id}"></div>`]);

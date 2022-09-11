@@ -36,6 +36,7 @@ export function runServer(options: ServerOptions): LiveServer {
         await app.listen({ port, signal: controler.signal });
         return 0;
       } catch (e) {
+        console.error(e);
         if (e instanceof Deno.errors.AddrInUse) {
           console.error(`Port ${port} is already in use`);
           return 1;
