@@ -2,7 +2,9 @@
   "imports": {
     "dinovel/std/": "./std/",
     "dinovel/engine/": "./engine/",
-    "dinovel/": "./src/",
+    "dinovel/client/": "./client/",
+    "dinovel/modules/": "./modules/",
+    "dinovel/widgets/": "./widgets/",
     "deno/": "https://deno.land/std@0.155.0/",
     "oak": "https://deno.land/x/oak@v11.1.0/mod.ts",
     "react": "https://esm.sh/react@18.2.0",
