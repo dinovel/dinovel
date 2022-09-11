@@ -1,8 +1,8 @@
 # Dinovel Roadmap
 ## Dinovel
 
-- [ ] Move development logic to separate module (bundlers, server, server plugins)
-- [ ] Implement CLI to build dinvovel project
+- [x] Move development logic to separate module (bundlers, server, server plugins)
+- [ ] Implement CLI to build dinovel project
 - [ ] Move client plugins and logic to engine
 - [ ] Merge to main
 - [ ] Create release pipelines
