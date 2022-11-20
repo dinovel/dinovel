@@ -8,13 +8,6 @@
 - [ ] Create release pipelines
 - [ ] Release to denoland
 
-## Dinovel compiler
-
-- [ ] Add bundler and index generator using deno runtime
-- [ ] Implement resources compiler
-- [ ] Create release pipelines
-- [ ] Release a new version
-
 ## Dinovel vscode extension
 
 - [ ] Add support for vscode extension

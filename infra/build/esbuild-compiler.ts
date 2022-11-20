@@ -1,5 +1,5 @@
-import { denoPlugin } from "https://deno.land/x/esbuild_deno_loader@0.5.2/mod.ts";
-import { initialize, build, BuildResult as ESBuildResult, BuildOptions, BuildFailure } from "https://deno.land/x/esbuild@v0.14.51/mod.js";
+import { denoPlugin } from "https://deno.land/x/esbuild_deno_loader@0.6.0/mod.ts";
+import { initialize, build, BuildResult as ESBuildResult, BuildOptions, BuildFailure } from "https://deno.land/x/esbuild@v0.15.13/mod.js";
 import { parse } from 'deno/path/mod.ts';
 import { Subject } from 'rxjs';
 
