@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dinovel</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="Visual novel framework">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <link rel="icon" type="image/png" href="/_media/favicon.png">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify/lib/themes/dark.css" />
+  <style>
+    :root {
+      --theme-color: #FF3F81;
+      --theme-back: #23153C;
+      --root-back: #3f3f3f;
+    }
+
+    .sidebar, body {
+      background-color: var(--root-back);
+    }
+
+    .app-nav li ul {
+      background-color: var(--root-back);
+      border: 1px solid;
+        border-top-color: currentcolor;
+        border-right-color: currentcolor;
+        border-bottom-color: currentcolor;
+        border-left-color: currentcolor;
+      border-color: #ddd #ddd #ccc;
+    }
+
+    h1.app-name img {
+      max-width: 50%;
+    }
+
+    .markdown-section p.tip, .markdown-section tr:nth-child(2n) {
+      background-color: unset;
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+    window.$docsify = {
+      name: 'Dinovel',
+      repo: 'https://github.com/dinovel/dinovel',
+      loadNavbar: true,
+      coverpage: true,
+      auto2top: true,
+      logo: '/_media/icon.svg',
+      hideSidebar: false,
+    }
+  </script>
+  <!-- Docsify v4 -->
+  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-typescript.min.js"></script>
+</body>
+</html>

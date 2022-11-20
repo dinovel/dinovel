@@ -1,12 +1,21 @@
 {
-    "deno.enable": true,
-    "deno.lint": true,
-    "deno.unstable": true,
-    "deno.importMap": "./import_map.json",
-    "rest-client.environmentVariables": {
-      "$shared": {},
-      "local": {
-        "REST_CLIENT_URL": "http://localhost:8666"
-      },
-    }
+  "deno.enable": true,
+  "deno.lint": true,
+  "editor.defaultFormatter": "denoland.vscode-deno",
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "peacock.color": "#FF3F81",
+  "workbench.colorCustomizations": {
+    "commandCenter.border": "#e7e7e799",
+    "sash.hoverBorder": "#ff72a2",
+    "statusBar.background": "#ff3f81",
+    "statusBar.foreground": "#e7e7e7",
+    "statusBarItem.hoverBackground": "#ff72a2",
+    "statusBarItem.remoteBackground": "#ff3f81",
+    "statusBarItem.remoteForeground": "#e7e7e7",
+    "titleBar.activeBackground": "#ff3f81",
+    "titleBar.activeForeground": "#e7e7e7",
+    "titleBar.inactiveBackground": "#ff3f8199",
+    "titleBar.inactiveForeground": "#e7e7e799"
+  }
 }

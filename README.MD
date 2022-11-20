@@ -1,1 +1,0 @@
-# Dinovel - Visual novel framework
