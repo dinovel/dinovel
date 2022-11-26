@@ -36,7 +36,9 @@ export class Mock<T> {
   }
 
   assertWasNotCalled(prop: keyof T): void {
-    m.assertSpyCalls(this.#proxyMap.get(prop) as m.Spy, 0);
+    const proxyProp = this.#proxyMap.get(prop);
+    if (proxyProp === undefined) return;
+    m.assertSpyCalls(proxyProp as m.Spy, 0);
   }
 
   assertWasCalledWith(prop: keyof T, ...args: unknown[]): void {

@@ -1,6 +1,6 @@
 import { cssRule, types } from 'npm:typestyle';
 import { normalize } from 'npm:csstips';
-import { createLogger } from '../logger/mod.ts';
+import type { ILogger, ILoggerFactory } from '../logger/mod.ts';
 
 export interface IStylePlugin {
   active?: boolean;
@@ -19,7 +19,11 @@ export class StyleBuilder implements IStyleBuilder {
   #rootStyles: Map<number, IStyle[]> = new Map();
   #active = false;
   #normalize = false;
-  #logger = createLogger('StyleBuilder');
+  #logger: ILogger;
+
+  constructor(logger: ILoggerFactory) {
+    this.#logger = logger.createLogger('StyleBuilder');
+  }
 
   importStyle(style: IStyle, order = 0): this {
     const list = this.#rootStyles.get(order) ?? [];

@@ -4,4 +4,5 @@
   - [Logger](/modules/logger.md)
   - [ECS](/modules/ecs.md)
   - [Render](/modules/render.md)
+  - [Core](/modules/core.md)
 - [Distribute](/dist.md)

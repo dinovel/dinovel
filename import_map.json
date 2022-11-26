@@ -1,7 +1,6 @@
 {
   "imports": {
     "deno/": "https://deno.land/std@0.163.0/",
-    "oak": "https://deno.land/x/oak@v11.1.0/mod.ts",
     "rxjs": "https://esm.sh/rxjs@7.5.7"
   }
 }

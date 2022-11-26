@@ -48,7 +48,7 @@ Deno.test('#LayerHandler', async (steps) => {
       layerHandler.declare('test');
       layerHandler.hide('test');
 
-      mockElem.assertWasCalled('remove');
+      mockElem.assertWasCalled('remove', 2);
     });
 
     await hideSteps.step('do nothing if layer is not declared', () => {
