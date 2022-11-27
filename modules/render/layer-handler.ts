@@ -4,6 +4,7 @@ export interface LayperProps {
   id: string;
   style: types.NestedCSSProperties;
   classNames: string[];
+  template?: string;
 }
 
 export interface ILayerHandler {
@@ -28,6 +29,7 @@ export class LayerHandler implements ILayerHandler {
 
   declare(name: string, props?: Partial<LayperProps> | undefined): void {
     const layerProps: LayperProps = {
+      ...(props ?? {}),
       id: props?.id ?? this.#getId(name),
       style: {
         position: 'absolute',
@@ -62,6 +64,11 @@ export class LayerHandler implements ILayerHandler {
 
     const div = this.#document.createElement('div');
     div.id = layer.id;
+
+    if (layer.template) {
+      div.innerHTML = layer.template;
+    }
+
     const styleClass = style(layer.style);
     div.classList.add(styleClass, ...layer.classNames);
     this.#document.body.appendChild(div);
