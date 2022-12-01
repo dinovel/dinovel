@@ -2,6 +2,7 @@ import type { ECS } from '../ecs/mod.ts';
 import type { Container } from '../infra/mod.ts';
 import type { ILoggerFactory } from '../logger/mod.ts';
 import type { IColorHandler, ILayerHandler, IStyleBuilder } from '../render/mod.ts';
+import { IUIStore } from '../ui/mod.ts';
 
 export interface IDinovel {
   readonly container: Container;
@@ -10,6 +11,7 @@ export interface IDinovel {
   readonly layers: ILayerHandler;
   readonly colors: IColorHandler;
   readonly styles: IStyleBuilder;
+  readonly webUI: IUIStore;
 
   start(): Promise<void>;
   stop(): void;

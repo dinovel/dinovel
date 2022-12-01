@@ -11,6 +11,7 @@ import {
   StyleBuilderService,
 } from '../render/mod.ts';
 import { GameLoop } from './game-loop.ts';
+import { IUIStore, UIStoreService } from '../ui/mod.ts';
 
 export class Dinovel implements IDinovel {
   #container: Container;
@@ -42,6 +43,10 @@ export class Dinovel implements IDinovel {
 
   get styles(): IStyleBuilder {
     return this.#container.get(StyleBuilderService);
+  }
+
+  get webUI(): IUIStore {
+    return this.#container.get(UIStoreService);
   }
 
   start(): Promise<void> {

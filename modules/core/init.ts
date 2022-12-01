@@ -4,6 +4,7 @@ import { registerECSService } from '../ecs/mod.ts';
 import { LogLevel, LogWriterConsole, registerLoggerServices } from '../logger/mod.ts';
 import { registerRenderServices } from '../render/mod.ts';
 import { Dinovel } from './dinovel.ts';
+import { registerUIStoreService } from '../ui/mod.ts';
 
 let dinovel: IDinovel | undefined;
 
@@ -20,6 +21,7 @@ export function initDinovel({
     registerECSService(depsContainer);
     registerLoggerServices(depsContainer);
     registerRenderServices(rootDocument, depsContainer);
+    registerUIStoreService(depsContainer);
   }
 
   dinovel = new Dinovel(depsContainer);
