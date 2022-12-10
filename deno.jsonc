@@ -23,6 +23,7 @@
     }
   },
   "tasks": {
-    "docs": "docsify serve ./docs"
+    "docs": "docsify serve ./docs",
+    "build-libs": "deno bundle dev/live-reload/mod.ts lib/live-reload.js"
   }
 }

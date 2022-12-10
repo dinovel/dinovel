@@ -117,7 +117,7 @@ export class UIStore implements IUIStore {
 
         connectedCallback() {
           this.#callSuper('connectedCallback');
-          if (e.connectedCallback) {
+          if (e.connectedCallback && this.isConnected) {
             e.connectedCallback(this);
           }
         }
