@@ -36,7 +36,9 @@ export class PersistentWebSocket {
 
   #init(): void {
     try {
-      this.#ws = new WebSocket(this.#url);
+      const wsURL = window.location.origin.replace(/^http/, 'ws') + this.#url;
+      console.debug('Connecting to persistent socket', wsURL);
+      this.#ws = new WebSocket(wsURL);
       this.#ws.onopen = () => {
         this.#log('log', 'Connected to persistent socket');
         this.#ready = true;
@@ -71,13 +73,12 @@ export class PersistentWebSocket {
 
   #receive(message: string): void {
     try {
-      const parsed = JSON.parse(message);
-      this.#log('log', 'Received message', parsed);
+      this.#log('log', 'Received message', message);
 
       if (this.#handlers.length) {
-        this.#handlers.forEach((h) => h(parsed));
+        this.#handlers.forEach((h) => h(message));
       } else {
-        this.#toHandle.push(parsed);
+        this.#toHandle.push(message);
       }
     } catch (e) {
       this.#log('error', 'Failed to parse message', message, e);

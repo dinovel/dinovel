@@ -8,6 +8,7 @@ class EventHandler {
     #logEvents;
     #listners = new Map();
     #timeout = new Map();
+    #broadcast = new BroadcastChannel('dinovel_dev');
     constructor(socket, logEvents = true){
         this.#socket = socket;
         this.#logEvents = logEvents;
@@ -35,6 +36,7 @@ class EventHandler {
         setTimeout(()=>{
             this.#listners.get('*')?.forEach((h)=>h(data));
             this.#listners.get(data.type)?.forEach((h)=>h(data));
+            this.#broadcast.postMessage(data);
         }, 300);
     }
     #parse(message1) {
@@ -91,7 +93,9 @@ class PersistentWebSocket {
     }
     #init() {
         try {
-            this.#ws = new WebSocket(this.#url);
+            const wsURL = window.location.origin.replace(/^http/, 'ws') + this.#url;
+            console.debug('Connecting to persistent socket', wsURL);
+            this.#ws = new WebSocket(wsURL);
             this.#ws.onopen = ()=>{
                 this.#log('log', 'Connected to persistent socket');
                 this.#ready = true;
@@ -122,12 +126,11 @@ class PersistentWebSocket {
     }
     #receive(message2) {
         try {
-            const parsed = JSON.parse(message2);
-            this.#log('log', 'Received message', parsed);
+            this.#log('log', 'Received message', message2);
             if (this.#handlers.length) {
-                this.#handlers.forEach((h)=>h(parsed));
+                this.#handlers.forEach((h)=>h(message2));
             } else {
-                this.#toHandle.push(parsed);
+                this.#toHandle.push(message2);
             }
         } catch (e11) {
             this.#log('error', 'Failed to parse message', message2, e11);
@@ -142,6 +145,7 @@ class PersistentWebSocket {
 class LiveReload {
     #eventHandler;
     constructor(options){
+        console.debug(options);
         this.#eventHandler = new EventHandler(new PersistentWebSocket(options.endpoint, 1000, options.enableLogging), options.enableLogging);
         this.#eventHandler.listen(options.reloadEvent, ()=>{
             this.#reload();

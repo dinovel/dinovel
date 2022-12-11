@@ -24,6 +24,7 @@
   },
   "tasks": {
     "docs": "docsify serve ./docs",
-    "build-libs": "deno bundle dev/live-reload/mod.ts lib/live-reload.js"
+    "build-libs": "deno bundle dev/live-reload/mod.ts dev/lib/live-reload.js",
+    "install-local": "deno install -A -f -n dinovel ./install.ts"
   }
 }

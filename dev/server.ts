@@ -129,7 +129,13 @@ export class DinovelServer implements DevServer {
         ctx.throw(501);
       }
 
-      this.#reloadSockets.push(ctx.upgrade());
+      const ws = ctx.upgrade();
+      ws.onclose = () => {
+        console.log('Websocket closed');
+        this.#reloadSockets = this.#reloadSockets.filter((s) => s !== ws);
+      };
+
+      this.#reloadSockets.push(ws);
     });
   }
 
@@ -147,7 +153,7 @@ export class DinovelServer implements DevServer {
       if (result.success) {
         this.#mainScript = result.output;
         this.#reloadSockets.forEach((socket) => {
-          socket.send('{ type: "reload" }');
+          socket.send(JSON.stringify({ type: 'reload' }));
         });
       }
     });
