@@ -1,4 +1,4 @@
-import { normalize, types, typestyle } from './typestyle.deps.ts';
+import { csstips, types, typestyle } from './typestyle.deps.ts';
 import type { ILogger, ILoggerFactory } from '../logger/mod.ts';
 
 export interface IStylePlugin {
@@ -47,7 +47,7 @@ export class StyleBuilder implements IStyleBuilder {
 
   render() {
     if (!this.#active && this.#normalize) {
-      normalize();
+      csstips.normalize();
     }
 
     this.#active = true;
