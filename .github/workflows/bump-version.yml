@@ -1,0 +1,46 @@
+name: bump_version
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump-type:
+        description: "The type of bump to perform. Must be one of: major, minor, patch"
+        required: true
+        default: "patch"
+        options:
+          - "patch"
+          - "minor"
+          - "major"
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v3
+
+      - name: Checkout to master
+        run: git checkout master
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+
+      - name: Run bump
+        id: bump_version
+        run: deno run -A ./scripts/bump-version.ts ${{ github.event.inputs.bump-type }} --github >> $GITHUB_OUTPUT
+
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
+        if: ${{ steps.bump_version.outputs.SUCCESS == 'true' }}
+        with:
+          message: "Bump ${{ github.event.inputs.bump-type }} version to: ${{ steps.bump_version.outputs.VERSION }}"
+          add: "version.ts"
+          author_name: "David Pires"
+          author_email: "developer@davidpires.pt"
+          push: 'master'
