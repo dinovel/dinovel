@@ -48,6 +48,5 @@ jobs:
         with:
           message: "Bump ${{ github.event.inputs.bump-type }} version to: ${{ steps.bump_version.outputs.VERSION }}"
           add: "version.ts"
-          author_name: "David Pires"
-          author_email: "developer@davidpires.pt"
-          push: 'master'
+          committer_name: GitHub Actions
+          committer_email: actions@github.com
