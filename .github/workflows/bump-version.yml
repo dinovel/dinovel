@@ -39,9 +39,12 @@ jobs:
         id: bump_version
         run: deno run -A ./scripts/bump-version.ts ${{ github.event.inputs.bump-type }} --github >> $GITHUB_OUTPUT
 
+      - name: Show version
+        run: echo "Updated to version ${{ steps.bump_version.outputs.VERSION }}"
+
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
-        if: ${{ steps.bump_version.outputs.SUCCESS == 'true' }}
+        if: ${{ steps.bump_version.outputs.VERSION != '' }}
         with:
           message: "Bump ${{ github.event.inputs.bump-type }} version to: ${{ steps.bump_version.outputs.VERSION }}"
           add: "version.ts"

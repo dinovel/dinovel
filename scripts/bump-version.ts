@@ -49,13 +49,8 @@ async function writeStdout(stream: WritableStream<Uint8Array>, input: InputArgs,
   const toWrite = new TextEncoder().encode(m);
   await stream.getWriter().write(toWrite);
 }
+
 const input = parseArgs();
-try {
-  const nextVersion = calcNextVersion(input);
-  await updateVersionInFile(nextVersion);
-  await writeStdout(Deno.stdout.writable, input, nextVersion, 'VERSION');
-  await writeStdout(Deno.stderr.writable, input, 'true', 'SUCCESS');
-} catch (err) {
-  await writeStdout(Deno.stderr.writable, input, 'false', 'SUCCESS');
-  throw err;
-}
+const nextVersion = calcNextVersion(input);
+await updateVersionInFile(nextVersion);
+await writeStdout(Deno.stdout.writable, input, nextVersion, 'VERSION');
