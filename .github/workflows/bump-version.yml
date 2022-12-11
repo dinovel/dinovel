@@ -4,9 +4,10 @@ on:
   workflow_dispatch:
     inputs:
       bump-type:
-        description: "The type of bump to perform. Must be one of: major, minor, patch"
+        description: "The type of bump to perform."
         required: true
-        default: "patch"
+        type: choice
+        default: patch
         options:
           - "patch"
           - "minor"
@@ -16,7 +17,7 @@ permissions:
   contents: write
 
 jobs:
-  test:
+  bump:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,6 +31,9 @@ jobs:
         uses: denoland/setup-deno@v1
         with:
           deno-version: v1.x
+
+      - name: cache dependencies
+        run: deno cache -r ./scripts/bump-version.ts
 
       - name: Run bump
         id: bump_version
