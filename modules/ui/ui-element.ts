@@ -1,4 +1,4 @@
-import type { types } from 'npm:typestyle';
+import type { types } from '../render/typestyle.deps.ts';
 
 export interface UIElement {
   name: string;

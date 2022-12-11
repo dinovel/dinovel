@@ -1,5 +1,4 @@
-import { cssRule, types } from 'npm:typestyle';
-import { normalize } from 'npm:csstips';
+import { normalize, types, typestyle } from './typestyle.deps.ts';
 import type { ILogger, ILoggerFactory } from '../logger/mod.ts';
 
 export interface IStylePlugin {
@@ -53,7 +52,7 @@ export class StyleBuilder implements IStyleBuilder {
 
     this.#active = true;
     const rootStyle = this.#build();
-    cssRule('html, body', rootStyle);
+    typestyle.cssRule('html, body', rootStyle);
   }
 
   #build() {

@@ -1,4 +1,4 @@
-import { color, percent } from 'npm:csx';
+import { csx } from './typestyle.deps.ts';
 import { ColorScheme, Rainbow12Bit } from './color-palette.ts';
 import { Observable, Subject } from 'rxjs';
 
@@ -56,20 +56,20 @@ export class ColorHandler implements IColorHandler {
 
   #lighten: ColorModAction = (colorCode, level = 10) => {
     if (level === 0) return colorCode;
-    return color(colorCode)
-      .lighten(percent(level)).toString();
+    return csx.color(colorCode)
+      .lighten(csx.percent(level)).toString();
   };
 
   #darken: ColorModAction = (colorCode, level = 10) => {
     if (level === 0) return colorCode;
-    return color(colorCode)
-      .darken(percent(level)).toString();
+    return csx.color(colorCode)
+      .darken(csx.percent(level)).toString();
   };
 
   #opacity: ColorModAction = (colorCode, level = 10) => {
     if (level === 0) return colorCode;
-    return color(colorCode)
-      .fade(percent(level)).toString();
+    return csx.color(colorCode)
+      .fade(csx.percent(level)).toString();
   };
 
   get(name: string, mode?: ColorModifier, level = 10) {

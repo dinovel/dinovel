@@ -1,6 +1,6 @@
 import { UIElement } from './ui-element.ts';
 import { ILogger, ILoggerFactory } from '../logger/mod.ts';
-import { createTypeStyle } from 'npm:typestyle';
+import { typestyle } from '../render/typestyle.deps.ts';
 
 export type UIElementLoader = UIElement | (() => Promise<UIElement> | UIElement);
 
@@ -89,7 +89,7 @@ export class UIStore implements IUIStore {
           const shadowRoot = this.attachShadow({ mode: 'open' });
 
           if (e.styles) {
-            const typeStyle = createTypeStyle();
+            const typeStyle = typestyle.createTypeStyle();
             for (const [name, style] of Object.entries(e.styles)) {
               typeStyle.cssRule(name, style);
             }

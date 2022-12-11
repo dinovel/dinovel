@@ -1,4 +1,4 @@
-import { style, types } from 'npm:typestyle';
+import { types, typestyle } from './typestyle.deps.ts';
 
 export interface LayperProps {
   id: string;
@@ -69,7 +69,7 @@ export class LayerHandler implements ILayerHandler {
       div.innerHTML = layer.template;
     }
 
-    const styleClass = style(layer.style);
+    const styleClass = typestyle.style(layer.style);
     div.classList.add(styleClass, ...layer.classNames);
     this.#document.body.appendChild(div);
     return div;
