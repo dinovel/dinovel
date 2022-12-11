@@ -1,6 +1,6 @@
 import type { ECS } from '../ecs/mod.ts';
 import type { Container } from '../infra/mod.ts';
-import type { ILoggerFactory } from '../logger/mod.ts';
+import type { ILoggerFactory, LogLevel } from '../logger/mod.ts';
 import type { IColorHandler, ILayerHandler, IStyleBuilder } from '../render/mod.ts';
 import { IUIStore } from '../ui/mod.ts';
 
@@ -24,4 +24,6 @@ export interface InitOptions {
   depsContainer?: Container;
   /** Whether to register default services */
   registerDefaults?: boolean;
+  /** Log level to use */
+  logLevel?: LogLevel;
 }

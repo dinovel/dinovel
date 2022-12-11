@@ -1,5 +1,5 @@
 import { Logger } from './logger.ts';
-import { ILog, ILogFormatter, ILogger, ILoggerFactory, ILogWriter } from './models.ts';
+import { ILog, ILogFormatter, ILogger, ILoggerFactory, ILogWriter, LogLevel } from './models.ts';
 
 export class LoggerFactory implements ILoggerFactory {
   #writers: ILogWriter[] = [];
@@ -25,6 +25,10 @@ export class LoggerFactory implements ILoggerFactory {
   disable(remove: (e: ILogWriter | ILogFormatter) => boolean): void {
     this.#writers = this.#writers.filter((e) => !remove(e));
     this.#formatters = this.#formatters.filter((e) => !remove(e));
+  }
+
+  setLogLevel(level: LogLevel): void {
+    this.#writers.forEach((writer) => writer.setLevel(level));
   }
 }
 

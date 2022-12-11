@@ -12,6 +12,7 @@ export function initDinovel({
   rootDocument,
   depsContainer = container,
   registerDefaults = true,
+  logLevel = LogLevel.info,
 }: InitOptions) {
   if (dinovel) {
     throw new Error('Dinovel has already been initialized.');
@@ -27,7 +28,9 @@ export function initDinovel({
   dinovel = new Dinovel(depsContainer);
 
   if (registerDefaults) {
-    dinovel.logger.use(new LogWriterConsole('Dinovel'));
+    const writer = new LogWriterConsole('Dinovel');
+    writer.setLevel(logLevel);
+    dinovel.logger.use(writer);
   }
 
   // deno-lint-ignore no-explicit-any

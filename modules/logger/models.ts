@@ -43,4 +43,6 @@ export interface ILoggerFactory {
 
   use(plugin: ILogWriter | ILogFormatter): void;
   disable(remove: (e: ILogWriter | ILogFormatter) => boolean): void;
+
+  setLogLevel(level: LogLevel): void;
 }
