@@ -101,10 +101,13 @@ export class UIStore implements IUIStore {
 
           if (e.template) {
             const templateId = `template-${e.name}`;
-            const template = document.createElement('template');
-            template.id = templateId;
-            template.innerHTML = e.template;
-            document.body.appendChild(template);
+            const exists = !!document.getElementById(templateId);
+            if (!exists) {
+              const template = document.createElement('template');
+              template.id = templateId;
+              template.innerHTML = e.template;
+              document.body.appendChild(template);
+            }
 
             const customTemplate = document.getElementById(templateId) as HTMLTemplateElement;
             shadowRoot.appendChild(customTemplate.content.cloneNode(true));
