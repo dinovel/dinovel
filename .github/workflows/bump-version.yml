@@ -23,9 +23,8 @@ jobs:
     steps:
       - name: Setup repo
         uses: actions/checkout@v3
-
-      - name: Checkout to master
-        run: git checkout master
+        with:
+          token: ${{ secrets.BUMP_TOKEN }}
 
       - name: Setup Deno
         uses: denoland/setup-deno@v1
