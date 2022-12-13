@@ -10,3 +10,4 @@
 - [ ] Default menu
 - [ ] Basic UI elements
 - [ ] Scene preview
+- [ ] Improve init experience
