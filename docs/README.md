@@ -3,7 +3,7 @@
 ## TODO
 
 - [x] Internationalization
-- [ ] Entity Blueprints
+- [x] Scenes
 - [ ] Dialog Scenes
 - [ ] Map Scenes
 - [ ] Save/Load handling
