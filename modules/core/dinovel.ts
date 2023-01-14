@@ -12,6 +12,8 @@ import {
 } from '../render/mod.ts';
 import { GameLoop } from './game-loop.ts';
 import { IUIStore, UIStoreService } from '../ui/mod.ts';
+import { ISaveHandler, SaveHandlerService } from '../save/mod.ts';
+import { ISceneHandler, ScenesHandlerService } from '../scenes/mod.ts';
 
 export class Dinovel implements IDinovel {
   #container: Container;
@@ -47,6 +49,14 @@ export class Dinovel implements IDinovel {
 
   get webUI(): IUIStore {
     return this.#container.get(UIStoreService);
+  }
+
+  get save(): ISaveHandler {
+    return this.#container.get(SaveHandlerService);
+  }
+
+  get scenes(): ISceneHandler {
+    return this.#container.get(ScenesHandlerService);
   }
 
   start(): Promise<void> {

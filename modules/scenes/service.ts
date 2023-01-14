@@ -5,7 +5,7 @@ import { SceneHandler } from './handler.ts';
 
 export const ScenesHandlerService = createToken<ISceneHandler>('ScenesHandlerService', true);
 
-export function registerScenesHandler(target: Container): void {
+export function registerScenesService(target: Container): void {
   target.register({
     token: ScenesHandlerService,
     factory: [LoggerFactoryService, SceneHandler],

@@ -5,6 +5,8 @@ import { LogLevel, LogWriterConsole, registerLoggerServices } from '../logger/mo
 import { registerRenderServices } from '../render/mod.ts';
 import { Dinovel } from './dinovel.ts';
 import { registerUIStoreService } from '../ui/mod.ts';
+import { registerSaveService } from '../save/mod.ts';
+import { registerScenesService } from '../scenes/mod.ts';
 
 let dinovel: IDinovel | undefined;
 
@@ -19,10 +21,12 @@ export function initDinovel({
   }
 
   if (registerDefaults) {
-    registerECSService(depsContainer);
     registerLoggerServices(depsContainer);
+    registerSaveService(depsContainer);
+    registerECSService(depsContainer);
     registerRenderServices(rootDocument, depsContainer);
     registerUIStoreService(depsContainer);
+    registerScenesService(depsContainer);
   }
 
   dinovel = new Dinovel(depsContainer);
