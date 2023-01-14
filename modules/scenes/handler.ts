@@ -61,9 +61,13 @@ export class SceneHandler implements ISceneHandler {
     }
   }
 
-  async clear() {
+  async clear(...sceneIds: string[]) {
     for (const scene of this.#loadedScenes) {
       try {
+        if (sceneIds.length > 0 && !sceneIds.includes(scene.id)) {
+          continue;
+        }
+
         await this.#clearScene(scene);
       } catch (err) {
         this.#logger.error(`Failed to clear scene ${scene.id}`, err);

@@ -1,7 +1,8 @@
 import type { IDinovel } from '../core/mod.ts';
 
-export interface SceneInstance {
+export interface SceneInstance<T = unknown> {
   id: string;
+  state?: T;
   preload?: (dinovel: IDinovel) => Promise<void> | void;
   start?: (dinovel: IDinovel) => Promise<void> | void;
   clear?: (dinovel: IDinovel) => Promise<void> | void;
@@ -25,7 +26,7 @@ export interface ISceneHandler {
   /** Load scenes */
   load(...sceneIds: string[]): Promise<void>;
   /** Clear current loaded scenes */
-  clear(): Promise<void>;
+  clear(...sceneIds: string[]): Promise<void>;
   /** Set scene to run between loading scenes */
   setLoadingScene(sceneId: string): void;
 }
