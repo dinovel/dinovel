@@ -9,14 +9,14 @@ export class SaveHandler implements ISaveHandler {
     this.#logger = loggerFactory.createLogger('SaveHandler');
   }
 
-  register(...modules: SaveModule[]): void {
+  register<T>(...modules: SaveModule<T>[]): void {
     for (const module of modules) {
       if (this.#modules.has(module.id)) {
         this.#logger.warn(`Module for id [${module.id}] is already registered`);
         continue;
       }
 
-      this.#modules.set(module.id, module);
+      this.#modules.set(module.id, module as SaveModule);
     }
   }
 
@@ -47,7 +47,14 @@ export class SaveHandler implements ISaveHandler {
 
     for (const [id, module] of this.#modules) {
       try {
-        data[id] = await module.save();
+        const moduleData = await module.save();
+
+        if (moduleData === undefined) {
+          // Ensure that the data is serializable
+          JSON.stringify(moduleData);
+
+          data[id] = moduleData;
+        }
       } catch (err) {
         this.#logger.error(`Failed to save module [${id}]`, err);
       }

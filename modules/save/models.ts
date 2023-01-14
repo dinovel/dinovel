@@ -9,5 +9,5 @@ export interface ISaveHandler {
   createSaveSate(): Promise<string>;
   loadSaveState(data: string): Promise<void>;
 
-  register(...modules: SaveModule[]): void;
+  register<T>(...modules: SaveModule<T>[]): void;
 }
